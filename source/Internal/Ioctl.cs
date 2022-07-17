@@ -48,7 +48,7 @@ namespace SharpXusb
         {
             bool result = Kernel32.DeviceIoControl(Device, IoctlCode, InBuffer, InBufferSize, OutBuffer, OutBufferSize,
                 out BytesReturned, Overlapped);
-            return result ? Marshal.GetLastWin32Error() : Win32Error.Success;
+            return result ? Win32Error.Success : Marshal.GetLastWin32Error();
         }
     }
 }
