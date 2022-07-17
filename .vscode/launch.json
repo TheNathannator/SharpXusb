@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Test App",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/testapp/bin/Debug/net6.0/SharpXusbTestApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/testapp",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Launch Test App (no build)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/testapp/bin/Debug/net6.0/SharpXusbTestApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/testapp",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        }
+    ]
+}
