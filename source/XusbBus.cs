@@ -74,26 +74,6 @@ namespace SharpXusb
             Dispose(false);
         }
 
-        private Dictionary<byte, XusbDevice> GetDevicesOnInterface()
-        {
-            var deviceList = new Dictionary<byte, XusbDevice>();
-
-            var busHandle = Handle;
-            var busInfo = GetInformation();
-
-            for (byte userIndex = 0; userIndex < busInfo.MaxIndex; userIndex++)
-            {
-                if (XusbCore.Device_GetInputState(busHandle, Version, userIndex, out _) != 0)
-                {
-                    continue;
-                }
-
-                deviceList.Add(userIndex, new XusbDevice(Version, userIndex));
-            }
-
-            return deviceList;
-        }
-
         public XusbBusInfo GetInformation()
         {
             int result = XusbCore.Bus_GetInformation(Handle, out var info);
