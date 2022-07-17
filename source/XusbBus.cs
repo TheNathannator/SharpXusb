@@ -84,7 +84,7 @@ namespace SharpXusb
             return info;
         }
 
-        public XusbBusInfoEx GetInformationEx(XusBusInformationExType type = XusBusInformationExType.Basic)
+        public XusbBusInfoEx GetInformationEx(XusbBusInformationExType type = XusbBusInformationExType.Basic)
         {
            int result = XusbCore.Bus_GetInformationEx(Handle, m_version, type, out var info);
             Utilities.ThrowOnError(result);

@@ -17,7 +17,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Bus_GetInformationEx(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            XusBusInformationExType type, out XusbBusInfoEx data
+            XusbBusInformationExType type, out XusbBusInfoEx data
         )
         {
 #if !SHARPXUSB_NO_VERSION_GUARDS

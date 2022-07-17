@@ -36,7 +36,7 @@ namespace SharpXusb
         // Unused = 15
     }
 
-    public enum XusBusInformationExType
+    public enum XusbBusInformationExType
     {
         Basic = 0,
         Full = 1,

@@ -23,7 +23,7 @@ namespace SharpXusb
         }
 
         public static int GetInformationEx(byte busIndex, out XusbBusInfoEx busInfo,
-            XusBusInformationExType type = XusBusInformationExType.Basic)
+            XusbBusInformationExType type = XusbBusInformationExType.Basic)
         {
             var bus = XusbList.GetBus(busIndex);
             if (bus != null)
