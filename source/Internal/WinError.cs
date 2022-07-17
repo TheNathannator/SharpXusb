@@ -11,6 +11,11 @@ namespace SharpXusb
         public const int Success = 0; // ERROR_SUCCESS
 
         /// <summary>
+        /// An operation is currently in progress with the device.
+        /// </summary>
+        public const int OperationInProgress = 329; // ERROR_OPERATION_IN_PROGRESS
+
+        /// <summary>
         /// The device is not connected.
         /// </summary>
         public const int DeviceNotConnected = 1167; // ERROR_DEVICE_NOT_CONNECTED
