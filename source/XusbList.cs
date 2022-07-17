@@ -65,6 +65,7 @@ namespace SharpXusb
 
         private static void Refresh()
         {
+            m_busList.Clear();
             m_deviceList.Clear();
     
             for (int instance = 0;
@@ -81,7 +82,7 @@ namespace SharpXusb
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error creating XusbDevice with index {instance}:");
+                    Debug.WriteLine($"Error creating XusbBus with index {instance}:");
                     Debug.WriteLine(ex);
                     continue;
                 }
