@@ -9,6 +9,7 @@ Some more exotic Xbox 360 controllers such as the Rock Band 3 Pro Keyboard and P
 ## Todo
 
 - [ ] Currently working on a console test app to demonstrate the library.
+- [ ] Finish up code documentation and create a step-by-step guide on how to use.
 - [ ] Error checking might not be the best currently. Need to go through everything and make sure cases such as device disconnection can be handled without having to catch an exception.
 - [ ] Pretty sure some of the IOCTLs aren't handled fully correctly just yet.
 
