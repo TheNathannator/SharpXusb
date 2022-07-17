@@ -34,7 +34,7 @@ namespace SharpXusb
             return state;
         }
 
-        public void SetState(XusbLedState ledState, XusbVibration vibration)
+        public void SetState(XusbLedSetting ledState, XusbVibration vibration)
         {
             int result = XusbCore.Device_SetState(m_bus.Handle, m_userIndex, ledState, vibration);
             Utilities.ThrowOnError(result);
@@ -46,13 +46,13 @@ namespace SharpXusb
             Utilities.ThrowOnError(result);
         }
 
-        public void SetState(XusbLedState ledState)
+        public void SetState(XusbLedSetting ledState)
         {
             int result = XusbCore.Device_SetState(m_bus.Handle, m_userIndex, ledState);
             Utilities.ThrowOnError(result);
         }
 
-        public XusbLedStateBuffer GetLedState()
+        public XusbLedState GetLedState()
         {
             int result = XusbCore.Device_GetLedState(m_bus.Handle, m_version, m_userIndex, out var ledState);
             Utilities.ThrowOnError(result);

@@ -519,7 +519,7 @@ namespace SharpXusb
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public struct XusbLedStateBuffer
+    public struct XusbLedState
     {
         [FieldOffset(0)]
         public ushort Version;

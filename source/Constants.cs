@@ -16,7 +16,7 @@ namespace SharpXusb
         Headset = 1
     }
 
-    public enum XusbLedState : byte
+    public enum XusbLedSetting : byte
     {
         Off = 0,
         Blink = 1,

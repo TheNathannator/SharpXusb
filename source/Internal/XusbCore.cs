@@ -47,7 +47,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_GetLedState(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte deviceIndex, out XusbLedStateBuffer data)
+            byte deviceIndex, out XusbLedState data)
         {
 #if !SHARPXUSB_NO_VERSION_GUARDS
             switch (version)
@@ -69,10 +69,10 @@ namespace SharpXusb
                 DeviceIndex = deviceIndex
             };
 
-            fixed (XusbLedStateBuffer* outBuffer = &data)
+            fixed (XusbLedState* outBuffer = &data)
             {
                 return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetLedState, &inBuffer,
-                    XusbBuffer_Common.Size, outBuffer, XusbLedStateBuffer.Size, out _);
+                    XusbBuffer_Common.Size, outBuffer, XusbLedState.Size, out _);
             }
         }
 
@@ -112,7 +112,7 @@ namespace SharpXusb
             }
         }
 
-        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedState ledState)
+        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState)
         {
             var inBuffer = new XusbBuffer_SetState()
             {
@@ -136,7 +136,7 @@ namespace SharpXusb
             return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
         }
 
-        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedState ledState,
+        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
             XusbVibration vibration)
         {
             var inBuffer = new XusbBuffer_SetState()
