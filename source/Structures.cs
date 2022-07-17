@@ -446,13 +446,24 @@ namespace SharpXusb
         /// <summary>
         /// Gets <see cref="Buffer"/> as an <see cref="XusbBusInfoEx_Minimal"/> structure.
         /// </summary>
+        /// <remarks>
+        /// Returns default data if no data was returned from the driver.
+        /// </remarks>
         public unsafe XusbBusInfoEx_Minimal Minimal
         {
             get
             {
                 if (DataLength != XusbBusInfoEx_Minimal.Size)
                 {
-                    throw new InvalidOperationException("The buffer does not contain this type of info.");
+                    if (DataLength == 0)
+                    {
+                        // TODO: See if there's a better way to handle this case
+                        return default;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("The buffer does not contain this type of info.");
+                    }
                 }
 
                 fixed (byte* buffer = Buffer)
@@ -468,13 +479,24 @@ namespace SharpXusb
         /// <summary>
         /// Gets <see cref="Buffer"/> as an <see cref="XusbBusInfoEx_Basic"/> array.
         /// </summary>
+        /// <remarks>
+        /// Returns null if no data was returned from the driver.
+        /// </remarks>
         public unsafe XusbBusInfoEx_Basic[] Basic
         {
             get
             {
                 if (DataLength != XusbBusInfoEx_Basic.Size * listSize)
                 {
-                    throw new InvalidOperationException("The buffer does not contain this type of info.");
+                    if (DataLength == 0)
+                    {
+                        // TODO: See if there's a better way to handle this case
+                        return null;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("The buffer does not contain this type of info.");
+                    }
                 }
 
                 fixed (byte* buffer = Buffer)
@@ -493,13 +515,24 @@ namespace SharpXusb
         /// <summary>
         /// Gets <see cref="Buffer"/> as an <see cref="XusbBusInfoEx_Full"/> array.
         /// </summary>
+        /// <remarks>
+        /// Returns null if no data was returned from the driver.
+        /// </remarks>
         public unsafe XusbBusInfoEx_Full[] Full
         {
             get
             {
                 if (DataLength != XusbBusInfoEx_Full.Size * listSize)
                 {
-                    throw new InvalidOperationException("The buffer does not contain this type of info.");
+                    if (DataLength == 0)
+                    {
+                        // TODO: See if there's a better way to handle this case
+                        return default;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("The buffer does not contain this type of info.");
+                    }
                 }
 
                 fixed (byte* buffer = Buffer)
