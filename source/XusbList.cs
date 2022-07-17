@@ -93,7 +93,7 @@ namespace SharpXusb
                     continue;
                 }
 
-                for (byte userIndex = 0; userIndex < busInfo.MaxIndex; userIndex++)
+                for (byte userIndex = 0; userIndex < busInfo.MaxCount; userIndex++)
                 {
                     var device = new XusbDevice(bus, userIndex);
 

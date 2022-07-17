@@ -214,10 +214,10 @@ namespace SharpXusb
         public ushort Version;
 
         /// <summary>
-        /// Highest user index connected to the bus, plus 1.
+        /// Maximum number of devices that can be connected to the bus.
         /// </summary>
         [FieldOffset(2)]
-        public byte MaxIndex;
+        public byte MaxCount;
 
         /// <summary>
         /// Number of devices connected to the bus.
@@ -261,8 +261,17 @@ namespace SharpXusb
         [FieldOffset(5)]
         public uint unk3;
 
+        /// <summary>
+        /// Vendor ID of the bus.
+        /// </summary>
         [FieldOffset(9)]
-        public uint unk4;
+        public ushort VendorId;
+
+        /// <summary>
+        /// Product ID of the bus.
+        /// </summary>
+        [FieldOffset(11)]
+        public ushort ProductId;
 
         [FieldOffset(13)]
         public uint unk5;
@@ -385,11 +394,17 @@ namespace SharpXusb
         [FieldOffset(16)]
         public ushort unk5;
 
+        /// <summary>
+        /// Vendor ID of the bus.
+        /// </summary>
         [FieldOffset(18)]
-        public ushort unk6;
+        public ushort VendorId;
 
+        /// <summary>
+        /// Product ID of the bus.
+        /// </summary>
         [FieldOffset(20)]
-        public ushort unk7;
+        public ushort ProductId;
 
         [FieldOffset(22)]
         public ushort unk8;
@@ -416,13 +431,13 @@ namespace SharpXusb
     public struct XusbBusInfoEx
     {
         /// <summary>
-        /// Padding.
+        /// Version number.
         /// </summary>
         [FieldOffset(0)]
-        public ushort Padding;
+        public ushort Version;
 
         /// <summary>
-        /// Whether or not the operation failed..
+        /// Whether or not the operation failed.
         /// </summary>
         [FieldOffset(2)]
         [MarshalAs(UnmanagedType.U1)]
@@ -438,7 +453,9 @@ namespace SharpXusb
         /// Buffer of data for the extended information.
         /// </summary>
         /// <remarks>
-        /// When getting basic or full info, this buffer contains an array of size 16 of 
+        /// The true type of this buffer varies based on the type of request this data was received from.
+        /// Use the <see cref="Minimal"/>, <see cref="Basic"/>, and <see cref="Full"/> properties to get
+        /// the proper types for each respective request.
         /// </remarks>
         [FieldOffset(5)]
         public unsafe fixed byte Buffer[944];
@@ -673,7 +690,7 @@ namespace SharpXusb
         public ushort ProductId;
 
         [FieldOffset(10)]
-        public short Revision;
+        public ushort Revision;
 
         [FieldOffset(12)]
         public uint XusbId;
