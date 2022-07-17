@@ -84,20 +84,35 @@ namespace SharpXusb
                 {
                     Debug.WriteLine($"Error creating XusbBus with index {instance}:");
                     Debug.WriteLine(ex);
+                    Debug.WriteLine($"Attempted to add index {instance} for {bus.DevicePath}");
+                    Debug.WriteLine("Current list state:");
+                    foreach (byte index in m_busList.Keys)
+                    {
+                        Debug.WriteLine($"{index} - {m_busList[index].DevicePath}");
+                    }
                     continue;
                 }
 
                 for (byte userIndex = 0; userIndex < busInfo.MaxIndex; userIndex++)
                 {
+                    var device = new XusbDevice(bus.Version, userIndex);
+
                     try
                     {
                         bus.GetDeviceInputState(userIndex);
-                        m_deviceList.Add(userIndex, new XusbDevice(bus.Version, userIndex));
+                        m_deviceList.Add(userIndex, device);
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine($"Error creating XusbDevice with index {userIndex}:");
                         Debug.WriteLine(ex);
+                        Debug.WriteLine($"Attempted to add index {userIndex} from {device.AssociatedBus.DevicePath}");
+                        Debug.WriteLine("Current list state:");
+                        foreach (byte index in m_deviceList.Keys)
+                        {
+                            Debug.WriteLine($"{index} - {m_deviceList[index].AssociatedBus.DevicePath}");
+                        }
+                        continue;
                     }
                 }
             }
