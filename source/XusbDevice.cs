@@ -16,9 +16,10 @@ namespace SharpXusb
         public byte UserIndex => m_userIndex;
         public XusbDeviceVersion Version => m_version;
 
-        internal XusbDevice(XusbDeviceVersion version, byte deviceIndex)
+        internal XusbDevice(XusbBus bus, byte deviceIndex)
         {
-            m_version = version;
+            m_bus = bus;
+            m_version = bus.Version;
             m_userIndex = deviceIndex;
         }
 
