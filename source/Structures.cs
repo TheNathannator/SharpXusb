@@ -226,10 +226,16 @@ namespace SharpXusb
         public byte DeviceCount;
 
         /// <summary>
-        /// Unused padding.
+        /// The status of the bus.
         /// </summary>
         [FieldOffset(4)]
-        public uint Padding;
+        public byte Status;
+
+        [FieldOffset(5)]
+        public byte unk1;
+
+        [FieldOffset(6)]
+        public ushort unk2;
 
         /// <summary>
         /// Vendor ID of the bus.

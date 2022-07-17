@@ -82,6 +82,17 @@ namespace SharpXusb
             return info;
         }
 
+        public bool TryGetInformation(out XusbBusInfo info)
+        {
+            int result = XusbCore.Bus_GetInformation(Handle, out info);
+            bool success = result == 0;
+            if (success)
+            {
+                m_version = (XusbDeviceVersion)info.Version;
+            }
+            return success;
+        }
+
         public XusbBusInfoEx GetInformationEx(XusbBusInformationExType type = XusbBusInformationExType.Basic)
         {
            int result = XusbCore.Bus_GetInformationEx(Handle, Version, type, out var info);
@@ -146,6 +157,12 @@ namespace SharpXusb
             int result = XusbCore.Device_GetAudioDeviceInformation(Handle, Version, userIndex, out var audioInfo);
             Utilities.ThrowOnError(result);
             return audioInfo;
+        }
+
+        public string GetDeviceAudioDeviceString(byte userIndex)
+        {
+            var audioInfo = GetDeviceAudioDeviceInformation(userIndex);
+            return $"USB\\VID_{audioInfo.VendorId}&PID_{audioInfo.ProductId}&IA_{audioInfo.InputId}";
         }
 
         public XusbInputWaitState WaitForDeviceGuideButton(byte userIndex)

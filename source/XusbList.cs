@@ -74,10 +74,14 @@ namespace SharpXusb
             )
             {
                 var bus = new XusbBus(path);
-                XusbBusInfo busInfo;
+
+                if (!bus.TryGetInformation(out var busInfo))
+                {
+                    continue;
+                }
+
                 try
                 {
-                    busInfo = bus.GetInformation();
                     m_busList.Add((byte)instance, bus);
                 }
                 catch (Exception ex)
@@ -93,13 +97,24 @@ namespace SharpXusb
                     continue;
                 }
 
+                if ((busInfo.Status & 0x80) != 0) // TODO: Figure out what this means, this value isn't named in OpenXInput
+                {
+                    continue;
+                }
+
                 for (byte userIndex = 0; userIndex < busInfo.MaxCount; userIndex++)
                 {
                     var device = new XusbDevice(bus, userIndex);
 
+                    if (!device.TryGetInputState(out var inputState))
+                    {
+                        continue;
+                    }
+
+                    Debug.Assert(inputState.Version != (ushort)XusbDeviceVersion.ProcNotSupported, "Invalid device version detected, check for bugs!");
+
                     try
                     {
-                        bus.GetDeviceInputState(userIndex);
                         m_deviceList.Add(userIndex, device);
                     }
                     catch (Exception ex)
