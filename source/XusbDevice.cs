@@ -34,6 +34,12 @@ namespace SharpXusb
             return state;
         }
 
+        public bool TryGetInputState(out XusbInputState state)
+        {
+            int result = XusbCore.Device_GetInputState(m_bus.Handle, m_version, m_userIndex, out state);
+            return result == 0;
+        }
+
         public void SetState(XusbLedSetting ledState, XusbVibration vibration)
         {
             int result = XusbCore.Device_SetState(m_bus.Handle, m_userIndex, ledState, vibration);
