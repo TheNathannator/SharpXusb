@@ -136,12 +136,7 @@ namespace SharpXusb
             return capabilities;
         }
 
-        public XusbBatteryInformation GetDeviceBatteryInformation(byte userIndex)
-        {
-            return GetDeviceBatteryInformation(userIndex, XusbSubDevice.Gamepad);
-        }
-
-        public XusbBatteryInformation GetDeviceBatteryInformation(byte userIndex, XusbSubDevice subDevice)
+        public XusbBatteryInformation GetDeviceBatteryInformation(byte userIndex, XusbSubDevice subDevice = XusbSubDevice.Gamepad)
         {
             int result = XusbCore.Device_GetBatteryInformation(m_handle, m_version, userIndex, out var batteryInfo, subDevice);
             Utilities.ThrowOnError(result);
