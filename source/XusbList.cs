@@ -73,10 +73,12 @@ namespace SharpXusb
                 instance++
             )
             {
+                Debug.WriteLine($"Found bus: {path}");
                 var bus = new XusbBus(path);
 
                 if (!bus.TryGetInformation(out var busInfo))
                 {
+                    Debug.WriteLine($"Couldn't get bus info, skipping.");
                     continue;
                 }
 
@@ -86,9 +88,9 @@ namespace SharpXusb
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error creating XusbBus with index {instance}:");
+                    Debug.WriteLine($"Couldn't add bus to list:");
                     Debug.WriteLine(ex);
-                    Debug.WriteLine($"Attempted to add index {instance} for {bus.DevicePath}");
+                    Debug.WriteLine($"Attempted to add to index {instance}.");
                     Debug.WriteLine("Current list state:");
                     foreach (byte index in m_busList.Keys)
                     {
@@ -99,15 +101,20 @@ namespace SharpXusb
 
                 if ((busInfo.Status & 0x80) != 0) // TODO: Figure out what this means, this value isn't named in OpenXInput
                 {
+                    Debug.WriteLine($"Bus has 0x80 bit set, skipping.");
                     continue;
                 }
 
+                Debug.WriteLine($"Max device count: {busInfo.MaxCount}");
+                Debug.WriteLine($"Connected device count: {busInfo.DeviceCount}");
                 for (byte userIndex = 0; userIndex < busInfo.MaxCount; userIndex++)
                 {
+                    Debug.WriteLine($"Checking for device at index {userIndex}");
                     var device = new XusbDevice(bus, userIndex);
 
                     if (!device.TryGetInputState(out var inputState))
                     {
+                        Debug.WriteLine($"Couldn't get input state, skipping.");
                         continue;
                     }
 
@@ -119,9 +126,8 @@ namespace SharpXusb
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"Error creating XusbDevice with index {userIndex}:");
+                        Debug.WriteLine($"Couldn't add device to list:");
                         Debug.WriteLine(ex);
-                        Debug.WriteLine($"Attempted to add index {userIndex} from {device.AssociatedBus.DevicePath}");
                         Debug.WriteLine("Current list state:");
                         foreach (byte index in m_deviceList.Keys)
                         {
