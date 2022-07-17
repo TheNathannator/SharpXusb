@@ -77,6 +77,7 @@ namespace SharpXusb
                 try
                 {
                     busInfo = bus.GetInformation();
+                    m_busList.Add((byte)instance, bus);
                 }
                 catch (Exception ex)
                 {
