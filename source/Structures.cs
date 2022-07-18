@@ -135,6 +135,20 @@ namespace SharpXusb
         /// </summary>
         [FieldOffset(17)]
         public byte Ext6;
+
+        /// <summary>
+        /// Gets this instance as a regular <see cref="XusbGamepad"/>.
+        /// </summary>
+        public unsafe XusbGamepad Standard
+        {
+            get
+            {
+                fixed (ushort* ptr = &Buttons)
+                {
+                    return *(XusbGamepad*)ptr;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -351,19 +365,19 @@ namespace SharpXusb
         [FieldOffset(3)]
         // Can't do this due to the fixed keyword only working with integral types
         // private fixed XusbBusInfoEx_Full_Sub unkList[8];
-        public unsafe fixed byte unkBuffer[56];
+        public unsafe fixed byte deviceList[56];
 
         private const int listSize = 8;
 
         // Have to do this instead
         /// <summary>
-        /// Gets <see cref="unkBuffer"/> as an <see cref="XusbBusInfoEx_Full_Sub"/> array.
+        /// Gets <see cref="deviceList"/> as an <see cref="XusbBusInfoEx_Full_Sub"/> array.
         /// </summary>
-        public unsafe XusbBusInfoEx_Full_Sub[] unkList
+        public unsafe XusbBusInfoEx_Full_Sub[] DeviceList
         {
             get
             {
-                fixed (byte* ptr = unkBuffer)
+                fixed (byte* ptr = deviceList)
                 {
                     XusbBusInfoEx_Full_Sub* buffer = (XusbBusInfoEx_Full_Sub*)ptr;
                     var array = new XusbBusInfoEx_Full_Sub[listSize];
@@ -587,7 +601,7 @@ namespace SharpXusb
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public struct XusbInputState_0100
+    public struct XusbInputState_v0
     {
         [FieldOffset(0)]
         public byte Status;
@@ -596,13 +610,13 @@ namespace SharpXusb
         public byte unk1;
 
         [FieldOffset(2)]
-        public byte InputId;
+        public byte unk2;
 
         [FieldOffset(3)]
         public uint PacketNumber;
 
         [FieldOffset(7)]
-        public byte unk2;
+        public byte unk3;
 
         [FieldOffset(8)]
         public XusbGamepad Gamepad;
@@ -611,7 +625,7 @@ namespace SharpXusb
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public struct XusbInputState_0101
+    public struct XusbInputState_v1
     {
         [FieldOffset(0)]
         public ushort Version;
@@ -623,16 +637,16 @@ namespace SharpXusb
         public byte unk1;
 
         [FieldOffset(4)]
-        public byte InputId;
+        public byte unk2;
 
         [FieldOffset(5)]
         public uint PacketNumber;
 
         [FieldOffset(9)]
-        public byte unk2;
+        public byte unk3;
 
         [FieldOffset(10)]
-        public byte unk3;
+        public byte unk4;
 
         [FieldOffset(11)]
         public XusbGamepadEx Gamepad;
@@ -647,14 +661,20 @@ namespace SharpXusb
         public ushort Version;
 
         [FieldOffset(2)] // Union emulation
-        public XusbInputState_0100 State_0100;
+        public XusbInputState_v0 State_v0;
 
         [FieldOffset(2)] // Union emulation
-        public XusbInputState_0101 State_0101;
+        public XusbInputState_v1 State_v1;
+
+        public uint PacketNumber =>
+            Version == (ushort)XusbDeviceVersion.v1_0 ? State_v0.PacketNumber : State_v1.PacketNumber;
+
+        public XusbGamepad Gamepad =>
+            Version == (ushort)XusbDeviceVersion.v1_0 ? State_v0.Gamepad : State_v1.Gamepad.Standard;
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public struct XusbCapabilities_0101
+    public struct XusbCapabilities_v1
     {
         [FieldOffset(0)]
         public ushort Version;
@@ -675,7 +695,7 @@ namespace SharpXusb
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public struct XusbCapabilities_0102
+    public struct XusbCapabilities_v2
     {
         [FieldOffset(0)]
         public ushort Version;
@@ -717,10 +737,22 @@ namespace SharpXusb
         public ushort Version;
 
         [FieldOffset(0)] // Union emulation
-        public XusbCapabilities_0101 Capabilities_0101;
+        public XusbCapabilities_v1 Capabilities_v1;
 
         [FieldOffset(0)] // Union emulation
-        public XusbCapabilities_0102 Capabilities_0102;
+        public XusbCapabilities_v2 Capabilities_v2;
+
+        [FieldOffset(2)] // This value exists in both unioned types
+        public byte Type;
+
+        [FieldOffset(3)] // This value exists in both unioned types
+        public byte SubType;
+
+        public XusbGamepadEx Gamepad =>
+            Version == (ushort)XusbDeviceVersion.v1_1 ? Capabilities_v1.Gamepad : Capabilities_v2.Gamepad;
+
+        public XusbVibration Vibration =>
+            Version == (ushort)XusbDeviceVersion.v1_1 ? Capabilities_v1.Vibration : Capabilities_v2.Vibration;
     }
 
     [StructLayout(LayoutKind.Explicit)]
@@ -757,7 +789,7 @@ namespace SharpXusb
         public ushort ProductId;
 
         [FieldOffset(6)]
-        public byte InputId;
+        public byte unk;
 
         internal const int Size = 7;
     }

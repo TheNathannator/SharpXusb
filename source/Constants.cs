@@ -98,7 +98,7 @@ namespace SharpXusb
     }
 
     /// <summary>
-    /// Flags for <see cref="XusbCapabilities_0102.Flags"/>.
+    /// Flags for <see cref="XusbCapabilities_v2.Flags"/>.
     /// </summary>
     [Flags]
     public enum XusbCapabilityFlags : ushort

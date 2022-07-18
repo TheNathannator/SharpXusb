@@ -272,7 +272,7 @@ namespace SharpXusbTestApp
                 Console.WriteLine($"  unk2:  0x{f1.unk2:X2}");
                 Console.WriteLine($"  unk3:  0x{f1.unk3:X2}");
 
-                var unkList = f1.unkList;
+                var unkList = f1.DeviceList;
                 for (int j = 0; j < unkList.Length; j++)
                 {
                     var f2 = unkList[j];
@@ -326,13 +326,13 @@ namespace SharpXusbTestApp
                 var inputState = device.GetInputState();
                 if (inputState.Version == (ushort)XusbDeviceVersion.v1_0)
                 {
-                    var state = inputState.State_0100;
+                    var state = inputState.State_v0;
                     Console.WriteLine($"State version:  0x{inputState.Version:X4}");
                     Console.WriteLine($"Status:         0x{state.Status:X2}");
                     Console.WriteLine($"unk1:           0x{state.unk1:X2}");
-                    Console.WriteLine($"InputId:        0x{state.InputId:X2}");
-                    Console.WriteLine($"Packet:         {state.PacketNumber}");
                     Console.WriteLine($"unk2:           0x{state.unk2:X2}");
+                    Console.WriteLine($"Packet:         {state.PacketNumber}");
+                    Console.WriteLine($"unk3:           0x{state.unk3:X2}");
 
                     var gamepad = state.Gamepad;
                     Console.WriteLine($"Buttons:        0x{gamepad.Buttons:X4}");
@@ -343,14 +343,14 @@ namespace SharpXusbTestApp
                 }
                 else
                 {
-                    var state = inputState.State_0101;
+                    var state = inputState.State_v1;
                     Console.WriteLine($"State version:  0x{state.Version:X4}");
                     Console.WriteLine($"Status:         0x{state.Status:X2}");
                     Console.WriteLine($"unk1:           0x{state.unk1:X2}");
-                    Console.WriteLine($"InputId:        0x{state.InputId:X2}");
-                    Console.WriteLine($"Packet:         {state.PacketNumber}");
                     Console.WriteLine($"unk2:           0x{state.unk2:X2}");
+                    Console.WriteLine($"Packet:         {state.PacketNumber}");
                     Console.WriteLine($"unk3:           0x{state.unk3:X2}");
+                    Console.WriteLine($"unk4:           0x{state.unk4:X2}");
 
                     var gamepad = state.Gamepad;
                     Console.WriteLine($"Buttons:        0x{gamepad.Buttons:X4}");
@@ -436,7 +436,7 @@ namespace SharpXusbTestApp
             }
             else if (capsBuf.Version == (ushort)XusbDeviceVersion.v1_1)
             {
-                var caps = capsBuf.Capabilities_0101;
+                var caps = capsBuf.Capabilities_v1;
                 Console.WriteLine($"Version:     0x{caps.Version:X4}");
                 Console.WriteLine($"Type:        0x{caps.Type:X2} ({(XusbControllerType)caps.Type})");
                 Console.WriteLine($"SubType:     0x{caps.SubType:X2} ({(XusbControllerSubType)caps.SubType})");
@@ -454,7 +454,7 @@ namespace SharpXusbTestApp
             }
             else
             {
-                var caps = capsBuf.Capabilities_0102;
+                var caps = capsBuf.Capabilities_v2;
                 Console.WriteLine($"Version:     0x{caps.Version:X4}");
                 Console.WriteLine($"Type:        0x{caps.Type:X2} ({(XusbControllerType)caps.Type})");
                 Console.WriteLine($"SubType:     0x{caps.SubType:X2} ({(XusbControllerSubType)caps.SubType})");
@@ -501,7 +501,7 @@ namespace SharpXusbTestApp
             Console.WriteLine($"Version:    0x{audioInfo.Version:X4}");
             Console.WriteLine($"VendorId:   0x{audioInfo.VendorId:X4}");
             Console.WriteLine($"ProductId:  0x{audioInfo.ProductId:X4}");
-            Console.WriteLine($"InputId:    0x{audioInfo.InputId:X4}");
+            Console.WriteLine($"unk:        0x{audioInfo.unk:X4}");
 
             Console.WriteLine();
             Utilities.WaitForKey();
