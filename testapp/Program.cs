@@ -12,7 +12,6 @@ namespace SharpXusbTestApp
             {
                 try
                 {
-                    Console.Clear();
                     Utilities.CycleMenu("XUSB Tests");
 
                     int choice = Utilities.PromptChoice("Select a device type: ", "Bus", "Input Device", "Exit");
