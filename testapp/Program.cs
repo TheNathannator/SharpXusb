@@ -10,15 +10,28 @@ namespace SharpXusbTestApp
 
             while (true)
             {
-                Console.Clear();
-                Utilities.CycleMenu("XUSB Tests");
-
-                int choice = Utilities.PromptChoice("Select a device type: ", "Bus", "Input Device", "Exit");
-                switch (choice)
+                try
                 {
-                    case 1: Tests.BusMain(); break;
-                    case 2: Tests.DeviceMain(); break;
-                    case 3: return;
+                    Console.Clear();
+                    Utilities.CycleMenu("XUSB Tests");
+
+                    int choice = Utilities.PromptChoice("Select a device type: ", "Bus", "Input Device", "Exit");
+                    switch (choice)
+                    {
+                        case 1: Tests.BusMain(); break;
+                        case 2: Tests.DeviceMain(); break;
+                        case 3: return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An unhandled exception has occured:");
+                    Console.WriteLine(ex.ToString());
+                    var key = Utilities.WaitForKey("Press Enter to exit, or press any other key to go back to the main menu.");
+                    if (key == ConsoleKey.Enter)
+                    {
+                        return;
+                    }
                 }
             }
         }
