@@ -105,7 +105,7 @@ namespace SharpXusb
             {
                 DeviceIndex = deviceIndex,
                 LedState = (byte)ledState,
-                Flags = XusbSetStateFlags.Led
+                Flags = (byte)XusbSetStateFlags.Led
             };
 
             return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
@@ -117,7 +117,7 @@ namespace SharpXusb
             {
                 DeviceIndex = deviceIndex,
                 Vibration = vibration,
-                Flags = XusbSetStateFlags.Vibration
+                Flags = (byte)XusbSetStateFlags.Vibration
             };
 
             return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
@@ -131,7 +131,7 @@ namespace SharpXusb
                 DeviceIndex = deviceIndex,
                 LedState = (byte)ledState,
                 Vibration = vibration,
-                Flags = XusbSetStateFlags.Led | XusbSetStateFlags.Vibration
+                Flags = (byte)XusbSetStateFlags.Led | (byte)XusbSetStateFlags.Vibration
             };
 
             return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);

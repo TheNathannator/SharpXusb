@@ -186,10 +186,9 @@ namespace SharpXusb
         Minimal = 2
     }
 
-    internal static class XusbSetStateFlags
+    internal enum XusbSetStateFlags : byte
     {
-        public const byte
         Led = 1,
-        Vibration = 2;
+        Vibration = 2
     }
 }
