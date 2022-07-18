@@ -122,7 +122,7 @@ namespace SharpXusbTestApp
 
                 var selectedDevice = SelectDevice(deviceList, "bus");
                 int selectedTest = PromptTests(deviceTests);
-                if (selectedTest == 0)
+                if (selectedTest == 1)
                 {
                     // User cancelled
                     return;
