@@ -21,11 +21,11 @@ namespace SharpXusb
     public enum XusbLedSetting : byte
     {
         Off = 0,
-        Blink = 1,
-        Player1_SwitchBlink = 2,
-        Player2_SwitchBlink = 3,
-        Player3_SwitchBlink = 4,
-        Player4_SwitchBlink = 5,
+        ShortBlink = 1,
+        Player1_Blink = 2,
+        Player2_Blink = 3,
+        Player3_Blink = 4,
+        Player4_Blink = 5,
         Player1 = 6,
         Player2 = 7,
         Player3 = 8,
@@ -34,8 +34,8 @@ namespace SharpXusb
         FastBlink = 11,
         SlowBlink = 12,
         Flipflop = 13,
-        AllBlink = 14
-        // Unused = 15
+        AllBlink = 14,
+        FlashToOff = 15
     }
 
     /// <summary>

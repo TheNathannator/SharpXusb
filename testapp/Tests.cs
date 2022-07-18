@@ -389,20 +389,21 @@ namespace SharpXusbTestApp
                     setLed = true;
                     ledState = (XusbLedSetting)Utilities.PromptChoice("Enter the LED state to set: ",
                         "Off",
-                        "Blink",
-                        "Player 1 Switch-Blink",
-                        "Player 2 Switch-Blink",
-                        "Player 3 Switch-Blink",
-                        "Player 4 Switch-Blink",
+                        "All Blink (Brief)",
+                        "Player 1 Blink",
+                        "Player 2 Blink",
+                        "Player 3 Blink",
+                        "Player 4 Blink",
                         "Player 1",
                         "Player 2",
                         "Player 3",
                         "Player 4",
-                        "Cycle",
+                        "Clockwise Cycle",
                         "Fast Blink",
                         "Slow Blink",
-                        "Flip-flop",
-                        "All Blink"
+                        "Flip-Flop",
+                        "All Blink",
+                        "Flash to Off"
                     ) - 1;
                 }
 
