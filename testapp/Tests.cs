@@ -367,62 +367,69 @@ namespace SharpXusbTestApp
 
         public static void Device_SetState(XusbDevice device)
         {
-            Utilities.CycleMenu("XUSB Device - Set State");
-
-            var vibration = new XusbVibration();
-            var ledState = XusbLedSetting.Off;
-
-            bool setVibration = false;
-            bool setLed = false;
-
-            if (Utilities.PromptYesNo("Set the speed of the vibration motors?"))
+            while (true)
             {
-                setVibration = true;
-                vibration.LeftMotorSpeed = (byte)Utilities.PromptChoice("Enter the speed for the left motor (0-255): ");
-                vibration.RightMotorSpeed = (byte)Utilities.PromptChoice("Enter the speed for the right motor (0-255): ");
-            }
+                Utilities.CycleMenu("XUSB Device - Set State");
 
-            if (Utilities.PromptYesNo("Set the state of the LED?"))
-            {
-                setLed = true;
-                ledState = (XusbLedSetting)Utilities.PromptChoice("Enter the LED state to set: ",
-                    "Off",
-                    "Blink",
-                    "Player 1 Switch-Blink",
-                    "Player 2 Switch-Blink",
-                    "Player 3 Switch-Blink",
-                    "Player 4 Switch-Blink",
-                    "Player 1",
-                    "Player 2",
-                    "Player 3",
-                    "Player 4",
-                    "Cycle",
-                    "Fast Blink",
-                    "Slow Blink",
-                    "Flip-flop",
-                    "All Blink"
-                ) - 1;
-            }
+                var vibration = new XusbVibration();
+                var ledState = XusbLedSetting.Off;
 
-            if (setVibration && setLed)
-            {
-                device.SetState(ledState, vibration);
-            }
-            else
-            {
-                if (setVibration)
+                bool setVibration = false;
+                bool setLed = false;
+
+                if (Utilities.PromptYesNo("Set the speed of the vibration motors?"))
                 {
-                    device.SetState(vibration);
+                    setVibration = true;
+                    vibration.LeftMotorSpeed = (byte)Utilities.PromptChoice("Enter the speed for the left motor (0-255): ");
+                    vibration.RightMotorSpeed = (byte)Utilities.PromptChoice("Enter the speed for the right motor (0-255): ");
                 }
 
-                if (setLed)
+                if (Utilities.PromptYesNo("Set the state of the LED?"))
                 {
-                    device.SetState(ledState);
+                    setLed = true;
+                    ledState = (XusbLedSetting)Utilities.PromptChoice("Enter the LED state to set: ",
+                        "Off",
+                        "Blink",
+                        "Player 1 Switch-Blink",
+                        "Player 2 Switch-Blink",
+                        "Player 3 Switch-Blink",
+                        "Player 4 Switch-Blink",
+                        "Player 1",
+                        "Player 2",
+                        "Player 3",
+                        "Player 4",
+                        "Cycle",
+                        "Fast Blink",
+                        "Slow Blink",
+                        "Flip-flop",
+                        "All Blink"
+                    ) - 1;
+                }
+
+                if (setVibration && setLed)
+                {
+                    device.SetState(ledState, vibration);
+                }
+                else
+                {
+                    if (setVibration)
+                    {
+                        device.SetState(vibration);
+                    }
+
+                    if (setLed)
+                    {
+                        device.SetState(ledState);
+                    }
+                }
+
+                Console.WriteLine();
+                var key = Utilities.WaitForKey("Press Enter to go back to the previous menu, or press any other key to repeat this test.");
+                if (key == ConsoleKey.Enter)
+                {
+                    return;
                 }
             }
-
-            Console.WriteLine();
-            Utilities.WaitForKey();
         }
 
         public static void Device_GetCapabilities(XusbDevice device)
