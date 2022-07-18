@@ -20,19 +20,6 @@ namespace SharpXusb
             XusbBusInformationExType type, out XusbBusInfoEx data
         )
         {
-// #if !SHARPXUSB_NO_VERSION_GUARDS
-//             switch (version)
-//             {
-//                 case XusbDeviceVersion.v1_4:
-//                     break;
-
-//                 default:
-//                     // Not supported, but don't want to throw an exception as a result
-//                     data = default;
-//                     return Win32Error.Success;
-//             }
-// #endif
-
             var inData = new XusbBuffer_GetBusInformationEx()
             {
                 Version = (ushort)XusbDeviceVersion.v1_4,
