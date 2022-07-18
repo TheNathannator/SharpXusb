@@ -5,10 +5,13 @@ namespace SharpXusbTestApp
 {
     static class Utilities
     {
-        public static void CycleMenu(string headerText)
+        public static void CycleMenu(string headerText, bool padHeader = true)
         {
-            // Padding between previous section and new section
-            Console.WriteLine();
+            if (padHeader)
+            {
+                // Padding between previous section and new section
+                Console.WriteLine();
+            }
 
             // Write header
             string dashes = new('-', headerText.Length);

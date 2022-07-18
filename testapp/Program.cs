@@ -8,11 +8,14 @@ namespace SharpXusbTestApp
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
+            // Don't pad the header on startup, but do after startup
+            bool padHeader = false;
             while (true)
             {
                 try
                 {
-                    Utilities.CycleMenu("XUSB Tests");
+                    Utilities.CycleMenu("XUSB Tests", padHeader);
+                    padHeader = true;
 
                     int choice = Utilities.PromptChoice("Select a device type: ", "Bus", "Input Device", "Exit");
                     switch (choice)
