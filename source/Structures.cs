@@ -222,7 +222,7 @@ namespace SharpXusb
     public struct XusbBusInfo
     {
         /// <summary>
-        /// Version number.
+        /// Version of the bus.
         /// </summary>
         [FieldOffset(0)]
         public ushort Version;
@@ -240,7 +240,7 @@ namespace SharpXusb
         public byte DeviceCount;
 
         /// <summary>
-        /// The status of the bus.
+        /// Status of the bus.
         /// </summary>
         [FieldOffset(4)]
         public byte Status;
@@ -263,6 +263,9 @@ namespace SharpXusb
         [FieldOffset(10)]
         public ushort ProductId;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 12;
     }
 
@@ -311,6 +314,9 @@ namespace SharpXusb
         [FieldOffset(26)]
         public byte unk10;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 27;
     }
 
@@ -341,6 +347,9 @@ namespace SharpXusb
         [FieldOffset(6)]
         public byte unk7;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 7;
     }
 
@@ -360,13 +369,16 @@ namespace SharpXusb
         public byte unk3;
 
         /// <summary>
-        /// List of 8 elements whose data is unknown.
+        /// List of info about connected devices?
         /// </summary>
         [FieldOffset(3)]
         // Can't do this due to the fixed keyword only working with integral types
         // private fixed XusbBusInfoEx_Full_Sub unkList[8];
         public unsafe fixed byte deviceList[56];
 
+        /// <summary>
+        /// The size of the list of devices(?).
+        /// </summary>
         private const int listSize = 8;
 
         // Have to do this instead
@@ -390,6 +402,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 59;
     }
 
@@ -441,6 +456,9 @@ namespace SharpXusb
         [FieldOffset(31)]
         public byte unk12;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 32;
     }
 
@@ -451,7 +469,7 @@ namespace SharpXusb
     public struct XusbBusInfoEx
     {
         /// <summary>
-        /// Version number.
+        /// Version of the query.
         /// </summary>
         [FieldOffset(0)]
         public ushort Version;
@@ -511,6 +529,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// The size of the list of buses.
+        /// </summary>
         private const int listSize = 16;
 
         /// <summary>
@@ -585,24 +606,51 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 949;
     }
 
+    /// <summary>
+    /// LED state information.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbLedState
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// State to set the controller LED to.
+        /// </summary>
+        /// <remarks>
+        /// See <see cref="XusbLedSetting"/> for possible values.
+        /// </remarks>
         [FieldOffset(2)]
         public byte LEDState;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 3;
     }
 
+    /// <summary>
+    /// State information for version v1.0.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbInputState_v0
     {
+        /// <summary>
+        /// The status of the device.
+        /// </summary>
+        /// <remarks>
+        /// 1 if the device is connected, 0 if the device is not.
+        /// </remarks>
         [FieldOffset(0)]
         public byte Status;
 
@@ -612,24 +660,45 @@ namespace SharpXusb
         [FieldOffset(2)]
         public byte unk2;
 
+        /// <summary>
+        /// Packet number for the state.
+        /// </summary>
         [FieldOffset(3)]
         public uint PacketNumber;
 
         [FieldOffset(7)]
         public byte unk3;
 
+        /// <summary>
+        /// Input information of the state.
+        /// </summary>
         [FieldOffset(8)]
         public XusbGamepad Gamepad;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 20;
     }
 
+    /// <summary>
+    /// State information for version v1.1.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbInputState_v1
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// The status of the device.
+        /// </summary>
+        /// <remarks>
+        /// 1 if the device is connected, 0 if the device is not.
+        /// </remarks>
         [FieldOffset(2)]
         public byte Status;
 
@@ -639,6 +708,9 @@ namespace SharpXusb
         [FieldOffset(4)]
         public byte unk2;
 
+        /// <summary>
+        /// Packet number for the state.
+        /// </summary>
         [FieldOffset(5)]
         public uint PacketNumber;
 
@@ -648,158 +720,302 @@ namespace SharpXusb
         [FieldOffset(10)]
         public byte unk4;
 
+        /// <summary>
+        /// Input information of the state.
+        /// </summary>
         [FieldOffset(11)]
         public XusbGamepadEx Gamepad;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 29;
     }
 
+    /// <summary>
+    /// State information for an XUSB device.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbInputState
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// Version v1.0 state information.
+        /// </summary>
         [FieldOffset(2)] // Union emulation
         public XusbInputState_v0 State_v0;
 
+        /// <summary>
+        /// Version v1.1 state information.
+        /// </summary>
         [FieldOffset(2)] // Union emulation
         public XusbInputState_v1 State_v1;
 
+        /// <summary>
+        /// Packet information of the state.
+        /// </summary>
         public uint PacketNumber =>
             Version == (ushort)XusbDeviceVersion.v1_0 ? State_v0.PacketNumber : State_v1.PacketNumber;
 
+        /// <summary>
+        /// Input information of the state.
+        /// </summary>
         public XusbGamepad Gamepad =>
             Version == (ushort)XusbDeviceVersion.v1_0 ? State_v0.Gamepad : State_v1.Gamepad.Standard;
     }
 
+    /// <summary>
+    /// Capability information for version v1.1.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbCapabilities_v1
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// Device type.
+        /// </summary>
         [FieldOffset(2)]
         public byte Type;
 
+        /// <summary>
+        /// Device sub-type.
+        /// </summary>
         [FieldOffset(3)]
         public byte SubType;
 
+        /// <summary>
+        /// Supported inputs of the device.
+        /// </summary>
         [FieldOffset(4)]
         public XusbGamepadEx Gamepad;
 
+        /// <summary>
+        /// Whether or not the device supports either vibration motor..
+        /// </summary>
         [FieldOffset(22)]
         public XusbVibration Vibration;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 24;
     }
 
+    /// <summary>
+    /// Capability information for version v1.2.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbCapabilities_v2
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// Device type.
+        /// </summary>
         [FieldOffset(2)]
         public byte Type;
 
+        /// <summary>
+        /// Device sub-type.
+        /// </summary>
         [FieldOffset(3)]
         public byte SubType;
 
+        /// <summary>
+        /// Capability flags.
+        /// </summary>
         [FieldOffset(4)]
         public ushort Flags;
 
+        /// <summary>
+        /// Vendor ID of the device.
+        /// </summary>
         [FieldOffset(6)]
         public ushort VendorId;
 
+        /// <summary>
+        /// Product ID of the device.
+        /// </summary>
         [FieldOffset(8)]
         public ushort ProductId;
 
+        /// <summary>
+        /// Device revision number.
+        /// </summary>
         [FieldOffset(10)]
         public ushort Revision;
 
+        /// <summary>
+        /// XUSB ID(?) of the device.
+        /// </summary>
         [FieldOffset(12)]
         public uint XusbId;
 
+        /// <summary>
+        /// Supported inputs of the device.
+        /// </summary>
         [FieldOffset(16)]
         public XusbGamepadEx Gamepad;
 
+        /// <summary>
+        /// Whether or not the device supports either vibration motor..
+        /// </summary>
         [FieldOffset(34)]
         public XusbVibration Vibration;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 36;
     }
 
+    /// <summary>
+    /// Capability information for an XUSB device.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbCapabilities
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)] // This value exists in both unioned types below
         public ushort Version;
 
+        /// <summary>
+        /// Version v1.1 capability information.
+        /// </summary>
         [FieldOffset(0)] // Union emulation
         public XusbCapabilities_v1 Capabilities_v1;
 
+        /// <summary>
+        /// Version v1.2 capability information.
+        /// </summary>
         [FieldOffset(0)] // Union emulation
         public XusbCapabilities_v2 Capabilities_v2;
 
+        /// <summary>
+        /// Device type.
+        /// </summary>
         [FieldOffset(2)] // This value exists in both unioned types
         public byte Type;
 
+        /// <summary>
+        /// Device sub-type.
+        /// </summary>
         [FieldOffset(3)] // This value exists in both unioned types
         public byte SubType;
 
+        /// <summary>
+        /// Supported inputs of the device.
+        /// </summary>
         public XusbGamepadEx Gamepad =>
             Version == (ushort)XusbDeviceVersion.v1_1 ? Capabilities_v1.Gamepad : Capabilities_v2.Gamepad;
 
+        /// <summary>
+        /// Whether or not the device supports either vibration motor..
+        /// </summary>
         public XusbVibration Vibration =>
             Version == (ushort)XusbDeviceVersion.v1_1 ? Capabilities_v1.Vibration : Capabilities_v2.Vibration;
     }
 
+    /// <summary>
+    /// Battery information for an XUSB device.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbBatteryInformation
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
         /// <summary>
-        /// Type of batteries currently in use.
+        /// Type of power source currently in use.
         /// </summary>
         [FieldOffset(2)]
         public byte Type;
 
         /// <summary>
-        /// Current power level of batteries.
+        /// Current power level of the device.
         /// </summary>
         [FieldOffset(3)]
         public byte Level;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 4;
     }
 
+    /// <summary>
+    /// Audio device information for an XUSB device.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbAudioDeviceInformation
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// Vendor ID of the audio device.
+        /// </summary>
         [FieldOffset(2)]
         public ushort VendorId;
 
+        /// <summary>
+        /// Product ID of the audio device.
+        /// </summary>
         [FieldOffset(4)]
         public ushort ProductId;
 
+        /// <summary>
+        /// Input(?) ID of the audio device.
+        /// </summary>
         [FieldOffset(6)]
         public byte unk;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 7;
     }
 
+    /// <summary>
+    /// Imformation of an input wait procedure carried out on an XUSB device.
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct XusbInputWaitState
     {
+        /// <summary>
+        /// Version of the query.
+        /// </summary>
         [FieldOffset(0)]
         public ushort Version;
 
+        /// <summary>
+        /// The status of the device.
+        /// </summary>
+        /// <remarks>
+        /// 1 if the device is connected, 0 if the device is not.
+        /// </remarks>
         [FieldOffset(2)]
         public byte Status;
 
@@ -815,6 +1031,9 @@ namespace SharpXusb
         [FieldOffset(27)]
         public ushort unk4;
 
+        /// <summary>
+        /// Size of this structure in bytes.
+        /// </summary>
         internal const int Size = 29;
     }
 }
