@@ -242,7 +242,7 @@ namespace SharpXusb
                     fixed (XusbAudioDeviceInformation* outBuffer = &data)
                     {
                         return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_0102.Size, out _);
+                            sizeof(byte), outBuffer, XusbCapabilities_v2.Size, out _);
                     }
                 }
             }
