@@ -83,7 +83,6 @@ namespace SharpXusb
 
                 default:
                 {
-                    data.Version = (ushort)XusbDeviceVersion.v1_1;
                     var inData = new XusbBuffer_Common()
                     {
                         Version = (ushort)XusbDeviceVersion.v1_1,
@@ -92,8 +91,10 @@ namespace SharpXusb
 
                     fixed (XusbInputState_v1* outBuffer = &data.State_v1)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetInput, &inData,
+                        int result = Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetInput, &inData,
                             XusbBuffer_Common.Size, outBuffer, XusbInputState_v1.Size, out _);
+                        data.Version = data.State_v1.Version;
+                        return result;
                     }
                 }
             }
