@@ -99,39 +99,32 @@ namespace SharpXusb
             }
         }
 
-        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState)
+        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState)
         {
-            var inBuffer = new XusbBuffer_SetState()
-            {
-                DeviceIndex = deviceIndex,
-                LedState = (byte)ledState,
-                Flags = (byte)XusbSetStateFlags.Led
-            };
-
-            return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
+            return Device_SetStateCommon(busHandle, deviceIndex, ledState, XusbVibration.Zero, XusbSetStateFlags.Led);
         }
 
-        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbVibration vibration)
+        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbVibration vibration)
         {
-            var inBuffer = new XusbBuffer_SetState()
-            {
-                DeviceIndex = deviceIndex,
-                Vibration = vibration,
-                Flags = (byte)XusbSetStateFlags.Vibration
-            };
-
-            return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
+            return Device_SetStateCommon(busHandle, deviceIndex, XusbLedSetting.Off, vibration, XusbSetStateFlags.Vibration);
         }
 
-        public static unsafe int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
+        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
             XusbVibration vibration)
         {
+            return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration,
+                XusbSetStateFlags.Led | XusbSetStateFlags.Vibration);
+        }
+
+        private static unsafe int Device_SetStateCommon(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
+            XusbVibration vibration, XusbSetStateFlags flags)
+        {
             var inBuffer = new XusbBuffer_SetState()
             {
                 DeviceIndex = deviceIndex,
                 LedState = (byte)ledState,
                 Vibration = vibration,
-                Flags = (byte)XusbSetStateFlags.Led | (byte)XusbSetStateFlags.Vibration
+                Flags = (byte)flags
             };
 
             return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
