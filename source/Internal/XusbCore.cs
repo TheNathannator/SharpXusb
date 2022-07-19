@@ -243,7 +243,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, EventWaitHandle waitHandle,
-            XusbDeviceVersion version, byte deviceIndex, out XusbInputWaitState state)
+            byte deviceIndex, out XusbInputWaitState state)
         {
             var inData = new XusbBuffer_Common()
             {
@@ -256,7 +256,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, EventWaitHandle waitHandle,
-            XusbDeviceVersion version, byte deviceIndex, out XusbInputWaitState state)
+            byte deviceIndex, out XusbInputWaitState state)
         {
             var inData = new XusbBuffer_WaitForInput()
             {

@@ -167,7 +167,7 @@ namespace SharpXusb
 
         public XusbInputWaitState WaitForDeviceGuideButton(byte userIndex)
         {
-            int result = XusbCore.Device_WaitForGuideButton(AsyncHandle, CreateWaitHandle(userIndex), Version, userIndex, out var waitState);
+            int result = XusbCore.Device_WaitForGuideButton(AsyncHandle, CreateWaitHandle(userIndex), userIndex, out var waitState);
             Utilities.ThrowOnError(result);
             return waitState;
         }
@@ -179,7 +179,7 @@ namespace SharpXusb
 
         public XusbInputWaitState WaitForDeviceInput(byte userIndex)
         {
-            int result = XusbCore.Device_WaitForInput(AsyncHandle, CreateWaitHandle(userIndex), Version, userIndex, out var waitState);
+            int result = XusbCore.Device_WaitForInput(AsyncHandle, CreateWaitHandle(userIndex), userIndex, out var waitState);
             Utilities.ThrowOnError(result);
             return waitState;
         }

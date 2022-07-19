@@ -162,7 +162,7 @@ namespace SharpXusb
                 }
 
                 return XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
-                    device.Version, userIndex, out waitState);
+                    userIndex, out waitState);
             }
             else
             {
@@ -192,7 +192,7 @@ namespace SharpXusb
                 }
 
                 return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
-                    device.Version, userIndex, out waitState);
+                    userIndex, out waitState);
             }
             else
             {
