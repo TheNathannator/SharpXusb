@@ -154,8 +154,8 @@ namespace SharpXusb
 
                     fixed (XusbCapabilities_v1* outBuffer = &data.Capabilities_v1)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_v1.Size, out _);
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &inData,
+                            XusbBuffer_Common.Size, outBuffer, XusbCapabilities_v1.Size, out _);
                     }
                 }
 #endif
@@ -170,8 +170,8 @@ namespace SharpXusb
 
                     fixed (XusbCapabilities_v2* outBuffer = &data.Capabilities_v2)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_v2.Size, out _);
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &inData,
+                            XusbBuffer_Common.Size, outBuffer, XusbCapabilities_v2.Size, out _);
                     }
                 }
             }
@@ -203,8 +203,8 @@ namespace SharpXusb
 
                     fixed (XusbBatteryInformation* outBuffer = &data)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_v2.Size, out _);
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &inData,
+                            XusbBuffer_GetBatteryInformation.Size, outBuffer, XusbBatteryInformation.Size, out _);
                     }
                 }
             }
@@ -235,8 +235,8 @@ namespace SharpXusb
 
                     fixed (XusbAudioDeviceInformation* outBuffer = &data)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_v2.Size, out _);
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &inData,
+                            XusbBuffer_Common.Size, outBuffer, XusbAudioDeviceInformation.Size, out _);
                     }
                 }
             }
