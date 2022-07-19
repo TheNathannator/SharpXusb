@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using PInvoke;
@@ -203,7 +204,7 @@ namespace SharpXusb
 
                     fixed (XusbBatteryInformation* outBuffer = &data)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &inData,
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetBatteryInformation, &inData,
                             XusbBuffer_GetBatteryInformation.Size, outBuffer, XusbBatteryInformation.Size, out _);
                     }
                 }
@@ -235,7 +236,7 @@ namespace SharpXusb
 
                     fixed (XusbAudioDeviceInformation* outBuffer = &data)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &inData,
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetAudioDeviceInformation, &inData,
                             XusbBuffer_Common.Size, outBuffer, XusbAudioDeviceInformation.Size, out _);
                     }
                 }
