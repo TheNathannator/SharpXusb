@@ -73,10 +73,10 @@ namespace SharpXusb
                 case XusbDeviceVersion.v1_0:
                 {
                     data.Version = (ushort)XusbDeviceVersion.v1_0;
-                    fixed (XusbInputState_0100* outBuffer = &data.State_0100)
+                    fixed (XusbInputState_v0* outBuffer = &data.State_v0)
                     {
                         return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetInput, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbInputState_0100.Size, out _);
+                            sizeof(byte), outBuffer, XusbInputState_v0.Size, out _);
                     }
                 }
 #endif
@@ -90,10 +90,10 @@ namespace SharpXusb
                         DeviceIndex = deviceIndex
                     };
 
-                    fixed (XusbInputState_0101* outBuffer = &data.State_0101)
+                    fixed (XusbInputState_v1* outBuffer = &data.State_v1)
                     {
                         return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetInput, &inData,
-                            XusbBuffer_Common.Size, outBuffer, XusbInputState_0101.Size, out _);
+                            XusbBuffer_Common.Size, outBuffer, XusbInputState_v1.Size, out _);
                     }
                 }
             }
@@ -158,10 +158,10 @@ namespace SharpXusb
                         DeviceIndex = deviceIndex
                     };
 
-                    fixed (XusbCapabilities_0101* outBuffer = &data.Capabilities_0101)
+                    fixed (XusbCapabilities_v1* outBuffer = &data.Capabilities_v1)
                     {
                         return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_0101.Size, out _);
+                            sizeof(byte), outBuffer, XusbCapabilities_v1.Size, out _);
                     }
                 }
 #endif
@@ -174,10 +174,10 @@ namespace SharpXusb
                         DeviceIndex = deviceIndex
                     };
 
-                    fixed (XusbCapabilities_0102* outBuffer = &data.Capabilities_0102)
+                    fixed (XusbCapabilities_v2* outBuffer = &data.Capabilities_v2)
                     {
                         return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_0102.Size, out _);
+                            sizeof(byte), outBuffer, XusbCapabilities_v2.Size, out _);
                     }
                 }
             }
@@ -210,7 +210,7 @@ namespace SharpXusb
                     fixed (XusbBatteryInformation* outBuffer = &data)
                     {
                         return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetCapabilities, &deviceIndex,
-                            sizeof(byte), outBuffer, XusbCapabilities_0102.Size, out _);
+                            sizeof(byte), outBuffer, XusbCapabilities_v2.Size, out _);
                     }
                 }
             }
