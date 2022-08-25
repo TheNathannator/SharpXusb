@@ -161,8 +161,10 @@ namespace SharpXusb
                     return Win32Error.OperationInProgress;
                 }
 
-                return XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
+                int result = XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
                     userIndex, out waitState);
+                CloseWaitHandle(userIndex);
+                return result;
             }
             else
             {
@@ -191,8 +193,10 @@ namespace SharpXusb
                     return Win32Error.OperationInProgress;
                 }
 
-                return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
+                int result = XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
                     userIndex, out waitState);
+                CloseWaitHandle(userIndex);
+                return result;
             }
             else
             {
