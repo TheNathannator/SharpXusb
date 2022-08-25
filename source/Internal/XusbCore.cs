@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using PInvoke;
@@ -9,6 +10,8 @@ namespace SharpXusb
 
     internal static class XusbCore
     {
+        private static readonly Dictionary<byte, EventWaitHandle> m_waitHandles = new Dictionary<byte, EventWaitHandle>(4);
+
         public static unsafe int Bus_GetInformation(SafeObjectHandle busHandle, out XusbBusInfo data)
         {
             fixed (XusbBusInfo* outBuffer = &data)
@@ -243,8 +246,8 @@ namespace SharpXusb
             }
         }
 
-        public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, EventWaitHandle waitHandle,
-            byte deviceIndex, out XusbInputWaitState state)
+        public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, byte deviceIndex,
+            out XusbInputWaitState state)
         {
             var inData = new XusbBuffer_Common()
             {
@@ -252,12 +255,12 @@ namespace SharpXusb
                 DeviceIndex = deviceIndex
             };
 
-            return Device_WaitCommon(busHandle_Async, waitHandle, XusbIoctl.Device_WaitForGuide, &inData,
+            return Device_WaitCommon(busHandle_Async, deviceIndex, XusbIoctl.Device_WaitForGuide, &inData,
                 XusbBuffer_Common.Size, out state);
         }
 
-        public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, EventWaitHandle waitHandle,
-            byte deviceIndex, out XusbInputWaitState state)
+        public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte deviceIndex,
+            out XusbInputWaitState state)
         {
             var inData = new XusbBuffer_WaitForInput()
             {
@@ -266,16 +269,23 @@ namespace SharpXusb
                 unk = 3
             };
 
-            return Device_WaitCommon(busHandle_Async, waitHandle, XusbIoctl.Device_WaitForInput, &inData,
+            return Device_WaitCommon(busHandle_Async, deviceIndex, XusbIoctl.Device_WaitForInput, &inData,
                 XusbBuffer_WaitForInput.Size, out state);
         }
 
-        private static unsafe int Device_WaitCommon(SafeObjectHandle busHandle_Async, EventWaitHandle waitHandle,
-            int ioctl, void* inBuffer, int inSize, out XusbInputWaitState state)
+        private static unsafe int Device_WaitCommon(SafeObjectHandle busHandle_Async, byte deviceIndex, int ioctl,
+            void* inBuffer, int inSize, out XusbInputWaitState state)
         {
+            if (!CreateWaitHandle(deviceIndex))
+            {
+                // A device wait is already in progress
+                state = default;
+                return Win32Error.OperationInProgress;
+            }
+
             var overlapped = new NativeOverlapped()
             {
-                EventHandle = waitHandle.SafeWaitHandle.DangerousGetHandle()
+                EventHandle = m_waitHandles[deviceIndex].SafeWaitHandle.DangerousGetHandle()
             };
 
             int result;
@@ -305,7 +315,39 @@ namespace SharpXusb
                 }
             }
 
+            CloseWaitHandle(deviceIndex);
             return result;
+        }
+
+        public static void Device_CancelWait(byte deviceIndex)
+        {
+            CloseWaitHandle(deviceIndex);
+        }
+
+        /// <summary>
+        /// Creates a wait handle for a device.
+        /// </summary>
+        private static bool CreateWaitHandle(byte userIndex)
+        {
+            if (m_waitHandles.ContainsKey(userIndex))
+            {
+                return false;
+            }
+
+            m_waitHandles.Add(userIndex, new EventWaitHandle(false, EventResetMode.ManualReset));
+            return true;
+        }
+
+        /// <summary>
+        /// Closes the wait handle for a device.
+        /// </summary>
+        private static void CloseWaitHandle(byte userIndex)
+        {
+            if (m_waitHandles.ContainsKey(userIndex))
+            {
+                m_waitHandles[userIndex]?.Dispose();
+                m_waitHandles.Remove(userIndex);
+            }
         }
 
         public static unsafe int Device_PowerOff(SafeObjectHandle busHandle, XusbDeviceVersion version, byte deviceIndex)

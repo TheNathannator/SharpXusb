@@ -13,7 +13,6 @@ namespace SharpXusb
         private SafeObjectHandle m_handle = null;
         private SafeObjectHandle m_handleAsync = null;
         private XusbDeviceVersion m_version;
-        private readonly Dictionary<byte, EventWaitHandle> m_waitHandles = new Dictionary<byte, EventWaitHandle>();
 
         public XusbDeviceVersion Version
         {
@@ -167,7 +166,8 @@ namespace SharpXusb
 
         public XusbInputWaitState WaitForDeviceGuideButton(byte userIndex)
         {
-            int result = XusbCore.Device_WaitForGuideButton(AsyncHandle, CreateWaitHandle(userIndex), userIndex, out var waitState);
+            int result = XusbCore.Device_WaitForGuideButton(AsyncHandle,
+                userIndex, out var waitState);
             Utilities.ThrowOnError(result);
             return waitState;
         }
@@ -179,7 +179,8 @@ namespace SharpXusb
 
         public XusbInputWaitState WaitForDeviceInput(byte userIndex)
         {
-            int result = XusbCore.Device_WaitForInput(AsyncHandle, CreateWaitHandle(userIndex), userIndex, out var waitState);
+            int result = XusbCore.Device_WaitForInput(AsyncHandle,
+                userIndex, out var waitState);
             Utilities.ThrowOnError(result);
             return waitState;
         }
@@ -191,27 +192,7 @@ namespace SharpXusb
 
         public void CancelWait(byte userIndex)
         {
-            CloseWaitHandle(userIndex);
-        }
-
-        private EventWaitHandle CreateWaitHandle(byte userIndex)
-        {
-            if (m_waitHandles.ContainsKey(userIndex))
-            {
-                throw new InvalidOperationException("The previous wait must be completed or cancelled before starting a new one.");
-            }
-
-            m_waitHandles.Add(userIndex, new EventWaitHandle(false, EventResetMode.ManualReset));
-            return m_waitHandles[userIndex];
-        }
-
-        private void CloseWaitHandle(byte userIndex)
-        {
-            if (m_waitHandles.ContainsKey(userIndex))
-            {
-                m_waitHandles[userIndex]?.Dispose();
-                m_waitHandles.Remove(userIndex);
-            }
+            XusbCore.Device_CancelWait(userIndex);
         }
 
         public void PowerOffDevice(byte userIndex)

@@ -6,8 +6,6 @@ namespace SharpXusb
 {
     public static class Xusb
     {
-        private static readonly Dictionary<byte, EventWaitHandle> m_waitHandles = new Dictionary<byte, EventWaitHandle>();
-
         public static int GetInformation(byte busIndex, out XusbBusInfo busInfo)
         {
             var bus = XusbList.GetBus(busIndex);
@@ -154,17 +152,8 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                if (!CreateWaitHandle(userIndex))
-                {
-                    // A device wait is already in progress
-                    waitState = default;
-                    return Win32Error.OperationInProgress;
-                }
-
-                int result = XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
+                return XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle,
                     userIndex, out waitState);
-                CloseWaitHandle(userIndex);
-                return result;
             }
             else
             {
@@ -186,17 +175,8 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                if (!CreateWaitHandle(userIndex))
-                {
-                    // A device wait is already in progress
-                    waitState = default;
-                    return Win32Error.OperationInProgress;
-                }
-
-                int result = XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle, m_waitHandles[userIndex],
+                return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle,
                     userIndex, out waitState);
-                CloseWaitHandle(userIndex);
-                return result;
             }
             else
             {
@@ -215,7 +195,7 @@ namespace SharpXusb
 
         public static void CancelWait(byte userIndex)
         {
-            CloseWaitHandle(userIndex);
+            XusbCore.Device_CancelWait(userIndex);
         }
 
         public static int PowerOffDevice(byte userIndex)
@@ -238,26 +218,6 @@ namespace SharpXusb
             {
                 // The device is already disconnected, so in a way this function was successful
                 return Win32Error.Success;
-            }
-        }
-
-        private static bool CreateWaitHandle(byte userIndex)
-        {
-            if (m_waitHandles.ContainsKey(userIndex))
-            {
-                return false;
-            }
-
-            m_waitHandles.Add(userIndex, new EventWaitHandle(false, EventResetMode.ManualReset));
-            return true;
-        }
-
-        private static void CloseWaitHandle(byte userIndex)
-        {
-            if (m_waitHandles.ContainsKey(userIndex))
-            {
-                m_waitHandles[userIndex]?.Dispose();
-                m_waitHandles.Remove(userIndex);
             }
         }
     }

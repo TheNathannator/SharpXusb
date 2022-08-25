@@ -94,8 +94,7 @@ namespace SharpXusb
 
         public XusbInputWaitState WaitForGuideButton()
         {
-            int result = XusbCore.Device_WaitForGuideButton(m_bus.AsyncHandle, CreateWaitHandle(), m_userIndex, out var waitState);
-            CloseWaitHandle();
+            int result = XusbCore.Device_WaitForGuideButton(m_bus.AsyncHandle, m_userIndex, out var waitState);
             Utilities.ThrowOnError(result);
             return waitState;
         }
@@ -107,8 +106,7 @@ namespace SharpXusb
 
         public XusbInputWaitState WaitForInput()
         {
-            int result = XusbCore.Device_WaitForInput(m_bus.AsyncHandle, CreateWaitHandle(), m_userIndex, out var waitState);
-            CloseWaitHandle();
+            int result = XusbCore.Device_WaitForInput(m_bus.AsyncHandle, m_userIndex, out var waitState);
             Utilities.ThrowOnError(result);
             return waitState;
         }
@@ -120,24 +118,7 @@ namespace SharpXusb
 
         public void CancelWait()
         {
-            CloseWaitHandle();
-        }
-
-        private EventWaitHandle CreateWaitHandle()
-        {
-            if (m_waitHandle != null)
-            {
-                throw new InvalidOperationException("The previous wait must be completed or cancelled before starting a new one.");
-            }
-
-            m_waitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
-            return m_waitHandle;
-        }
-
-        private void CloseWaitHandle()
-        {
-            m_waitHandle?.Dispose();
-            m_waitHandle = null;
+            XusbCore.Device_CancelWait(m_userIndex);
         }
 
         public void PowerOff()
