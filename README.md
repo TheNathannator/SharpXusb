@@ -23,3 +23,5 @@ Other information comes from my own research and reverse-engineering attempts.
 ## License
 
 This project is licensed under the MIT license. See [LICENSE](LICENSE) for details.
+
+Some functionality is provided by third-party libraries, which have their own licenses. See [THIRDPARTY](THIRDPARTY) for details.
