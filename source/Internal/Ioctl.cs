@@ -10,16 +10,8 @@ namespace SharpXusb
     {
         public const int
         TYPE_FLAG_VENDOR = 0x8000,
-
         FUNCTION_FLAG_CUSTOM = 0x800,
-
         METHOD_BUFFERED = 0,
-        METHOD_IN_DIRECT = 1,
-        METHOD_OUT_DIRECT = 2,
-        METHOD_NEITHER = 3,
-
-        ACCESS_ANY = 0x00,
-        ACCESS_SPECIAL = ACCESS_ANY,
         ACCESS_READ = 0x01,
         ACCESS_WRITE = 0x02;
 
