@@ -31,11 +31,17 @@ namespace SharpXusbTestApp
             (Device_WaitForInput,              "Wait For Input")
         };
 
-        private static T SelectDevice<T>(Dictionary<byte, T> list, string deviceType)
+        private static T SelectDevice<T>(Dictionary<byte, T> list, string deviceType) where T : class
         {
             while (true)
             {
-                byte index = (byte)(Utilities.PromptChoice($"Select the {deviceType} to use: ") - 1);
+                int selection = Utilities.PromptChoice(0, 256, $"Select the {deviceType} to use (0 to cancel): ") - 1;
+                if (selection == -1)
+                {
+                    return null;
+                }
+
+                byte index = (byte)selection;
                 if (!list.ContainsKey(index))
                 {
                     Console.WriteLine("Invalid entry, please try again.");
@@ -85,6 +91,11 @@ namespace SharpXusbTestApp
                 }
 
                 var selectedBus = SelectDevice(busList, "bus");
+                if (selectedBus is null)
+                {
+                    // User cancelled
+                    return;
+                }
 
                 while (true)
                 {
@@ -125,6 +136,11 @@ namespace SharpXusbTestApp
                 }
 
                 var selectedDevice = SelectDevice(deviceList, "device");
+                if (selectedDevice is null)
+                {
+                    // User cancelled
+                    return;
+                }
 
                 while (true)
                 {
