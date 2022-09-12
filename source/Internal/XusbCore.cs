@@ -120,6 +120,19 @@ namespace SharpXusb
             return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration, XusbSetStateFlags.Both);
         }
 
+        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
+            XusbVibration vibration, XusbSetStateFlags flags)
+        {
+            // Ignore if flags are invalid
+            if (flags > XusbSetStateFlags.Both || flags == 0)
+            {
+                // Throw exception as this is user error, not an external error
+                throw new ArgumentException("Invalid flags combination provided.", nameof(flags));
+            }
+
+            return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration, flags);
+        }
+
         private static unsafe int Device_SetStateCommon(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
             XusbVibration vibration, XusbSetStateFlags flags)
         {

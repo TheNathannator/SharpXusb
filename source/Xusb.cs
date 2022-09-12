@@ -62,6 +62,19 @@ namespace SharpXusb
             }
         }
 
+        public static int SetState(byte userIndex, XusbLedSetting ledState, XusbVibration vibration, XusbSetStateFlags flags)
+        {
+            var device = XusbList.GetDevice(userIndex);
+            if (device != null)
+            {
+                return XusbCore.Device_SetState(device.AssociatedBus.Handle, userIndex, ledState, vibration, flags);
+            }
+            else
+            {
+                return Win32Error.DeviceNotConnected;
+            }
+        }
+
         public static int SetState(byte userIndex, XusbVibration vibration)
         {
             var device = XusbList.GetDevice(userIndex);

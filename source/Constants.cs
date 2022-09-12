@@ -292,10 +292,10 @@ namespace SharpXusb
     }
 
     /// <summary>
-    /// Flags used in the state setting buffer sent to the driver.
+    /// Flags used when setting device state.
     /// </summary>
     [Flags]
-    internal enum XusbSetStateFlags : byte
+    public enum XusbSetStateFlags : byte
     {
         /// <summary>
         /// Set the LED's state.
