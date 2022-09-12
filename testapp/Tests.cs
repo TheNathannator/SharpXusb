@@ -291,33 +291,25 @@ namespace SharpXusbTestApp
         {
             Utilities.CycleMenu("XUSB Device - Wait For Guide Button");
 
-            Console.WriteLine("Press any key to stop the test and return to the selection.");
-
-            var timer = new Stopwatch();
-            while (!Console.KeyAvailable)
-            {
-                timer.Start();
-                var waitState = device.WaitForGuideButton();
-                timer.Stop();
-                Console.WriteLine($"Waited for {timer.ElapsedMilliseconds} ms");
-                timer.Reset();
-
-                Console.WriteLine("Wait State:");
-                waitState.ToConsole(2);
-            }
+            Device_WaitCommon(() => device.WaitForGuideButton());
         }
 
         public unsafe static void Device_WaitForInput(XusbDevice device)
         {
             Utilities.CycleMenu("XUSB Device - Wait for Input");
 
+            Device_WaitCommon(() => device.WaitForInput());
+        }
+
+        private unsafe static void Device_WaitCommon(Func<XusbInputWaitState> func)
+        {
             Console.WriteLine("Press any key to stop the test and return to the selection.");
 
             var timer = new Stopwatch();
             while (!Console.KeyAvailable)
             {
                 timer.Start();
-                var waitState = device.WaitForInput();
+                var waitState = func();
                 timer.Stop();
                 Console.WriteLine($"Waited for {timer.ElapsedMilliseconds} ms");
                 timer.Reset();
