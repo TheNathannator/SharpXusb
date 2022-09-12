@@ -304,6 +304,11 @@ namespace SharpXusb
         /// <summary>
         /// Set the vibration motors' states.
         /// </summary>
-        Vibration = 2
+        Vibration = 2,
+
+        /// <summary>
+        /// Set the state of both the LED and the vibration motors.
+        /// </summary>
+        Both = Led | Vibration
     }
 }

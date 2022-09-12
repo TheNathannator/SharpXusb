@@ -117,8 +117,7 @@ namespace SharpXusb
         public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
             XusbVibration vibration)
         {
-            return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration,
-                XusbSetStateFlags.Led | XusbSetStateFlags.Vibration);
+            return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration, XusbSetStateFlags.Both);
         }
 
         private static unsafe int Device_SetStateCommon(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
