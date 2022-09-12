@@ -306,12 +306,22 @@ namespace SharpXusbTestApp
             Console.WriteLine("Press any key to stop the test and return to the selection.");
 
             var timer = new Stopwatch();
+            int cursorPosition = Console.CursorTop;
+            string timeString = "";
             while (!Console.KeyAvailable)
             {
+                Console.SetCursorPosition(0, cursorPosition);
+
                 timer.Start();
                 var waitState = func();
                 timer.Stop();
-                Console.WriteLine($"Waited for {timer.ElapsedMilliseconds} ms");
+
+                // Clear line
+                Console.WriteLine(new string(' ', timeString.Length));
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
+
+                timeString = $"Waited for {timer.ElapsedMilliseconds} ms";
+                Console.WriteLine(timeString);
                 timer.Reset();
 
                 Console.WriteLine("Wait State:");
