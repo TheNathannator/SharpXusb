@@ -212,20 +212,18 @@ namespace SharpXusbTestApp
 
                 var vibration = new XusbVibration();
                 var ledState = XusbLedSetting.Off;
-
-                bool setVibration = false;
-                bool setLed = false;
+                XusbSetStateFlags flags = 0;
 
                 if (Utilities.PromptYesNo("Set the speed of the vibration motors?"))
                 {
-                    setVibration = true;
+                    flags |= XusbSetStateFlags.Vibration;
                     vibration.LeftMotorSpeed = (byte)Utilities.PromptChoice(0, 255, "Enter the speed for the left motor (0-255): ");
                     vibration.RightMotorSpeed = (byte)Utilities.PromptChoice(0, 255, "Enter the speed for the right motor (0-255): ");
                 }
 
                 if (Utilities.PromptYesNo("Set the state of the LED?"))
                 {
-                    setLed = true;
+                    flags |= XusbSetStateFlags.Led;
                     ledState = (XusbLedSetting)Utilities.PromptChoice("Enter the LED state to set: ",
                         "Off",
                         "All Blink (Brief)",
@@ -246,22 +244,7 @@ namespace SharpXusbTestApp
                     ) - 1;
                 }
 
-                if (setVibration && setLed)
-                {
-                    device.SetState(ledState, vibration);
-                }
-                else
-                {
-                    if (setVibration)
-                    {
-                        device.SetState(vibration);
-                    }
-
-                    if (setLed)
-                    {
-                        device.SetState(ledState);
-                    }
-                }
+                device.SetState(ledState, vibration, flags);
 
                 Console.WriteLine();
                 var key = Utilities.WaitForKey("Press Enter to go back to the previous menu, or press any other key to repeat this test.");
