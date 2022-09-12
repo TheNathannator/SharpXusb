@@ -35,7 +35,7 @@ namespace SharpXusbTestApp
         {
             while (true)
             {
-                byte index = (byte)Utilities.PromptChoice($"Select the {deviceType} to use: ");
+                byte index = (byte)(Utilities.PromptChoice($"Select the {deviceType} to use: ") - 1);
                 if (!list.ContainsKey(index))
                 {
                     Console.WriteLine("Invalid entry, please try again.");
@@ -79,7 +79,7 @@ namespace SharpXusbTestApp
                 foreach (var busIndex in busList.Keys)
                 {
                     var bus = busList[busIndex];
-                    Console.WriteLine($"  Index {busIndex}:");
+                    Console.WriteLine($"  {busIndex + 1}.");
                     Console.WriteLine($"  - Version: {bus.Version} (0x{(short)bus.Version:X4})");
                     Console.WriteLine($"  - Path: {bus.DevicePath}");
                 }
@@ -115,7 +115,7 @@ namespace SharpXusbTestApp
                 foreach (var deviceIndex in deviceList.Keys)
                 {
                     var device = deviceList[deviceIndex];
-                    Console.WriteLine($"  {deviceIndex}.");
+                    Console.WriteLine($"  {deviceIndex + 1}.");
                     Console.WriteLine($"  - Version: {device.Version} (0x{(short)device.Version:X4})");
                     Console.WriteLine($"  - Path: {device.AssociatedBus.DevicePath}");
                 }
