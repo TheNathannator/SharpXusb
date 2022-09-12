@@ -294,6 +294,7 @@ namespace SharpXusb
     /// <summary>
     /// Flags used in the state setting buffer sent to the driver.
     /// </summary>
+    [Flags]
     internal enum XusbSetStateFlags : byte
     {
         /// <summary>
