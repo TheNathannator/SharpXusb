@@ -140,7 +140,7 @@ namespace SharpXusbTestApp
                 Console.WriteLine($"{indent}Packet:      {state.PacketNumber}");
                 Console.WriteLine($"{indent}unk3:        0x{state.unk3:X2}");
 
-                state.Gamepad.ToConsole();
+                state.Gamepad.ToConsole(indentAmount);
             }
             else
             {
@@ -153,7 +153,7 @@ namespace SharpXusbTestApp
                 Console.WriteLine($"{indent}unk3:        0x{state.unk3:X2}");
                 Console.WriteLine($"{indent}unk4:        0x{state.unk4:X2}");
 
-                state.Gamepad.ToConsole();
+                state.Gamepad.ToConsole(indentAmount);
             }
         }
 
@@ -202,9 +202,9 @@ namespace SharpXusbTestApp
                 Console.WriteLine($"{indent}Type:        0x{caps.Type:X2} ({(XusbControllerType)caps.Type})");
                 Console.WriteLine($"{indent}SubType:     0x{caps.SubType:X2} ({(XusbControllerSubType)caps.SubType})");
 
-                caps.Gamepad.ToConsole();
+                caps.Gamepad.ToConsole(indentAmount);
 
-                caps.Vibration.ToConsole();
+                caps.Vibration.ToConsole(indentAmount);
             }
             else
             {
@@ -218,9 +218,9 @@ namespace SharpXusbTestApp
                 Console.WriteLine($"{indent}Revision:    0x{caps.Revision:X4}");
                 Console.WriteLine($"{indent}XusbId:      0x{caps.XusbId:X8}");
 
-                caps.Gamepad.ToConsole();
+                caps.Gamepad.ToConsole(indentAmount);
 
-                caps.Vibration.ToConsole();
+                caps.Vibration.ToConsole(indentAmount);
             }
         }
 
