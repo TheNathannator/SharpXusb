@@ -219,8 +219,8 @@ namespace SharpXusbTestApp
                 if (Utilities.PromptYesNo("Set the speed of the vibration motors?"))
                 {
                     setVibration = true;
-                    vibration.LeftMotorSpeed = (byte)Utilities.PromptChoice("Enter the speed for the left motor (0-255): ");
-                    vibration.RightMotorSpeed = (byte)Utilities.PromptChoice("Enter the speed for the right motor (0-255): ");
+                    vibration.LeftMotorSpeed = (byte)Utilities.PromptChoice(0, 255, "Enter the speed for the left motor (0-255): ");
+                    vibration.RightMotorSpeed = (byte)Utilities.PromptChoice(0, 255, "Enter the speed for the right motor (0-255): ");
                 }
 
                 if (Utilities.PromptYesNo("Set the state of the LED?"))

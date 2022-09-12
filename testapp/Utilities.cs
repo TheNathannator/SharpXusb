@@ -56,6 +56,11 @@ namespace SharpXusbTestApp
 
         public static int PromptChoice(params string[] args)
         {
+            return PromptChoice(int.MinValue, int.MaxValue, args);
+        }
+
+        public static int PromptChoice(int min, int max, params string[] args)
+        {
             if (args == null || args.Length < 1)
             {
                 throw new ArgumentException($"No strings supplied to PromptChoice.", nameof(args));
@@ -89,7 +94,8 @@ namespace SharpXusbTestApp
                 string entry = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(entry) || !int.TryParse(entry, out int selection)
-                    || selection < (args.Length == 1 ? 0 : 1) || (args.Length > 1 && selection >= args.Length))
+                    || selection < (args.Length == 1 ? 0 : 1)
+                    || (args.Length == 1 ? (selection < min || selection > max) : selection >= args.Length))
                 {
                     Console.WriteLine("Invalid entry, please try again.");
                 }
