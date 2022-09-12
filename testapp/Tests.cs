@@ -219,6 +219,7 @@ namespace SharpXusbTestApp
                     flags |= XusbSetStateFlags.Vibration;
                     vibration.LeftMotorSpeed = (byte)Utilities.PromptChoice(0, 255, "Enter the speed for the left motor (0-255): ");
                     vibration.RightMotorSpeed = (byte)Utilities.PromptChoice(0, 255, "Enter the speed for the right motor (0-255): ");
+                    vibration.ToConsole();
                 }
 
                 if (Utilities.PromptYesNo("Set the state of the LED?"))
@@ -242,6 +243,7 @@ namespace SharpXusbTestApp
                         "All Blink",
                         "Flash to Off"
                     ) - 1;
+                    Console.WriteLine(ledState);
                 }
 
                 device.SetState(ledState, vibration, flags);
