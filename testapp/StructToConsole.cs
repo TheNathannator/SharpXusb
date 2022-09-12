@@ -77,7 +77,7 @@ namespace SharpXusbTestApp
 
                     for (int i = 0; i < basic.Length; i++)
                     {
-                        Console.WriteLine($"Basic[{i}]:");
+                        Console.WriteLine($"{indent}Basic[{i}]:");
 
                         var element = basic[i];
                         Console.WriteLine($"{indent}  unk1:       0x{element.unk1:X2}");
@@ -106,7 +106,7 @@ namespace SharpXusbTestApp
 
                     for (int i = 0; i < full.Length; i++)
                     {
-                        Console.WriteLine($"Full[{i}]:");
+                        Console.WriteLine($"{indent}Full[{i}]:");
 
                         var busElement = full[i];
                         Console.WriteLine($"{indent}  unk1:  0x{busElement.unk1:X2}");
