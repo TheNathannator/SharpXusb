@@ -1,13 +1,21 @@
 using System;
+using System.Collections.Generic;
 using SharpXusb;
 
 namespace SharpXusbTestApp
 {
     static class StructToConsole
     {
+        private static Dictionary<int, string> indentations = new();
         private static string GetIndentation(int indentAmount)
         {
-            return new string(' ', indentAmount);
+            string indent;
+            if (!indentations.TryGetValue(indentAmount, out indent))
+            {
+                indent = new string(' ', indentAmount);
+                indentations.Add(indentAmount, indent);
+            }
+            return indent;
         }
 
         public static void ToConsole(this XusbBusInfo busInfo, int indentAmount = 0)
