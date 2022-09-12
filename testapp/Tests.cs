@@ -120,7 +120,7 @@ namespace SharpXusbTestApp
                     Console.WriteLine($"  - Path: {device.AssociatedBus.DevicePath}");
                 }
 
-                var selectedDevice = SelectDevice(deviceList, "bus");
+                var selectedDevice = SelectDevice(deviceList, "device");
                 int selectedTest = PromptTests(deviceTests);
                 if (selectedTest == 1)
                 {
