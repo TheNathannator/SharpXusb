@@ -98,26 +98,26 @@ namespace SharpXusb
             return audioInfo;
         }
 
-        public XusbInputWaitState WaitForGuideButton()
+        public XusbInputState WaitForGuideButton()
         {
-            int result = XusbCore.Device_WaitForGuideButton(m_bus.AsyncHandle, m_userIndex, out var waitState);
+            int result = XusbCore.Device_WaitForGuideButton(m_bus.AsyncHandle, m_userIndex, out var inputState);
             Utilities.ThrowOnError(result);
-            return waitState;
+            return inputState;
         }
 
-        public async Task<XusbInputWaitState> WaitForGuideButtonAsync()
+        public async Task<XusbInputState> WaitForGuideButtonAsync()
         {
             return await Task.Run(() => WaitForGuideButton());
         }
 
-        public XusbInputWaitState WaitForInput()
+        public XusbInputState WaitForInput()
         {
-            int result = XusbCore.Device_WaitForInput(m_bus.AsyncHandle, m_userIndex, out var waitState);
+            int result = XusbCore.Device_WaitForInput(m_bus.AsyncHandle, m_userIndex, out var inputState);
             Utilities.ThrowOnError(result);
-            return waitState;
+            return inputState;
         }
 
-        public async Task<XusbInputWaitState> WaitForInputAsync()
+        public async Task<XusbInputState> WaitForInputAsync()
         {
             return await Task.Run(() => WaitForInput());
         }

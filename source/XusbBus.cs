@@ -170,28 +170,28 @@ namespace SharpXusb
             return $"USB\\VID_{audioInfo.VendorId}&PID_{audioInfo.ProductId}&IA_{audioInfo.unk}";
         }
 
-        public XusbInputWaitState WaitForDeviceGuideButton(byte userIndex)
+        public XusbInputState WaitForDeviceGuideButton(byte userIndex)
         {
             int result = XusbCore.Device_WaitForGuideButton(AsyncHandle,
-                userIndex, out var waitState);
+                userIndex, out var inputState);
             Utilities.ThrowOnError(result);
-            return waitState;
+            return inputState;
         }
 
-        public async Task<XusbInputWaitState> WaitForDeviceGuideButtonAsync(byte userIndex)
+        public async Task<XusbInputState> WaitForDeviceGuideButtonAsync(byte userIndex)
         {
             return await Task.Run(() => WaitForDeviceGuideButton(userIndex));
         }
 
-        public XusbInputWaitState WaitForDeviceInput(byte userIndex)
+        public XusbInputState WaitForDeviceInput(byte userIndex)
         {
             int result = XusbCore.Device_WaitForInput(AsyncHandle,
-                userIndex, out var waitState);
+                userIndex, out var inputState);
             Utilities.ThrowOnError(result);
-            return waitState;
+            return inputState;
         }
 
-        public async Task<XusbInputWaitState> WaitForDeviceInputAsync(byte userIndex)
+        public async Task<XusbInputState> WaitForDeviceInputAsync(byte userIndex)
         {
             return await Task.Run(() => WaitForDeviceInput(userIndex));
         }

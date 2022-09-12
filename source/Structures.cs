@@ -997,43 +997,4 @@ namespace SharpXusb
         /// </summary>
         internal const int Size = 7;
     }
-
-    /// <summary>
-    /// Imformation of an input wait procedure carried out on an XUSB device.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public struct XusbInputWaitState
-    {
-        /// <summary>
-        /// Version of the query.
-        /// </summary>
-        [FieldOffset(0)]
-        public ushort Version;
-
-        /// <summary>
-        /// The status of the device.
-        /// </summary>
-        /// <remarks>
-        /// 1 if the device is connected, 0 if the device is not.
-        /// </remarks>
-        [FieldOffset(2)]
-        public byte Status;
-
-        [FieldOffset(3)]
-        public ulong unk1;
-
-        [FieldOffset(11)]
-        public ulong unk2;
-
-        [FieldOffset(19)]
-        public ulong unk3;
-
-        [FieldOffset(27)]
-        public ushort unk4;
-
-        /// <summary>
-        /// Size of this structure in bytes.
-        /// </summary>
-        internal const int Size = 29;
-    }
 }

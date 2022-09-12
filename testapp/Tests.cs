@@ -301,7 +301,7 @@ namespace SharpXusbTestApp
             Device_WaitCommon(() => device.WaitForInput());
         }
 
-        private unsafe static void Device_WaitCommon(Func<XusbInputWaitState> func)
+        private unsafe static void Device_WaitCommon(Func<XusbInputState> func)
         {
             Console.WriteLine("Press any key to stop the test and return to the selection.");
 
@@ -324,7 +324,7 @@ namespace SharpXusbTestApp
                 Console.WriteLine(timeString);
                 timer.Reset();
 
-                Console.WriteLine("Wait State:");
+                Console.WriteLine("Input State:");
                 waitState.ToConsole(2);
             }
         }

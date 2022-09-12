@@ -259,7 +259,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, byte deviceIndex,
-            out XusbInputWaitState state)
+            out XusbInputState inputState)
         {
             var inData = new XusbBuffer_Common()
             {
@@ -268,11 +268,11 @@ namespace SharpXusb
             };
 
             return Device_WaitCommon(busHandle_Async, deviceIndex, XusbIoctl.Device_WaitForGuide, &inData,
-                XusbBuffer_Common.Size, out state);
+                XusbBuffer_Common.Size, out inputState);
         }
 
         public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte deviceIndex,
-            out XusbInputWaitState state)
+            out XusbInputState inputState)
         {
             var inData = new XusbBuffer_WaitForInput()
             {
@@ -282,16 +282,16 @@ namespace SharpXusb
             };
 
             return Device_WaitCommon(busHandle_Async, deviceIndex, XusbIoctl.Device_WaitForInput, &inData,
-                XusbBuffer_WaitForInput.Size, out state);
+                XusbBuffer_WaitForInput.Size, out inputState);
         }
 
         private static unsafe int Device_WaitCommon(SafeObjectHandle busHandle_Async, byte deviceIndex, int ioctl,
-            void* inBuffer, int inSize, out XusbInputWaitState state)
+            void* inBuffer, int inSize, out XusbInputState inputState)
         {
+            inputState = default;
             if (!CreateWaitHandle(deviceIndex))
             {
                 // A device wait is already in progress
-                state = default;
                 return Win32Error.OperationInProgress;
             }
 
@@ -301,10 +301,10 @@ namespace SharpXusb
             };
 
             int result;
-            fixed (XusbInputWaitState* outBuffer = &state)
+            fixed (XusbInputState_v1* outBuffer = &inputState.State_v1)
             {
                 result = Ioctl.SendReceive(busHandle_Async, ioctl, inBuffer, inSize, outBuffer,
-                    XusbInputWaitState.Size, out _, &overlapped);
+                    XusbInputState_v1.Size, out _, &overlapped);
                 if (result == Win32Error.IoPending)
                 {
                     bool bResult = Kernel32.GetOverlappedResult(busHandle_Async, &overlapped, out int bytes, true);
@@ -312,11 +312,11 @@ namespace SharpXusb
                     {
                         result = Marshal.GetLastWin32Error();
                     }
-                    else if (bytes != XusbInputWaitState.Size)
+                    else if (bytes != XusbInputState_v1.Size)
                     {
                         result = Win32Error.Cancelled;
                     }
-                    else if (state.Status == 0)
+                    else if (outBuffer->Status == 0)
                     {
                         result = Win32Error.DeviceNotConnected;
                     }

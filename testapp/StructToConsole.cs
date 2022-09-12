@@ -291,18 +291,5 @@ namespace SharpXusbTestApp
             Console.WriteLine($"{indent}ProductId:  0x{audioInfo.ProductId:X4}");
             Console.WriteLine($"{indent}unk:        0x{audioInfo.unk:X4}");
         }
-
-        public static void ToConsole(this XusbInputWaitState waitState, int indentAmount = 0)
-        {
-            string indent = GetIndentation(indentAmount);
-
-            Console.WriteLine($"{indent}Version:  0x{waitState.Version:X4}");
-            Console.WriteLine($"{indent}Status:   0x{waitState.Status:X2}");
-
-            Console.WriteLine($"{indent}unk1:     0x{waitState.unk1:X2}");
-            Console.WriteLine($"{indent}unk2:     0x{waitState.unk2:X2}");
-            Console.WriteLine($"{indent}unk3:     0x{waitState.unk3:X2}");
-            Console.WriteLine($"{indent}unk4:     0x{waitState.unk4:X2}");
-        }
     }
 }

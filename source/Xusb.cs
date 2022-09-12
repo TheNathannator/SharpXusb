@@ -160,49 +160,49 @@ namespace SharpXusb
             }
         }
 
-        public static int WaitForGuideButton(byte userIndex, out XusbInputWaitState waitState)
+        public static int WaitForGuideButton(byte userIndex, out XusbInputState inputState)
         {
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
                 return XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle,
-                    userIndex, out waitState);
+                    userIndex, out inputState);
             }
             else
             {
-                waitState = default;
+                inputState = default;
                 return Win32Error.DeviceNotConnected;
             }
         }
 
-        public static async Task<(int, XusbInputWaitState)> WaitForGuideButtonAsync(byte userIndex)
+        public static async Task<(int, XusbInputState)> WaitForGuideButtonAsync(byte userIndex)
         {
             return await Task.Run(() => {
-                int result = WaitForGuideButton(userIndex, out var waitState);
-                return (result, waitState);
+                int result = WaitForGuideButton(userIndex, out var inputState);
+                return (result, inputState);
             });
         }
 
-        public static int WaitForInput(byte userIndex, out XusbInputWaitState waitState)
+        public static int WaitForInput(byte userIndex, out XusbInputState inputState)
         {
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
                 return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle,
-                    userIndex, out waitState);
+                    userIndex, out inputState);
             }
             else
             {
-                waitState = default;
+                inputState = default;
                 return Win32Error.DeviceNotConnected;
             }
         }
 
-        public static async Task<(int, XusbInputWaitState)> WaitForInputAsync(byte userIndex)
+        public static async Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
         {
             return await Task.Run(() => {
-                int result = WaitForInput(userIndex, out var waitState);
-                return (result, waitState);
+                int result = WaitForInput(userIndex, out var inputState);
+                return (result, inputState);
             });
         }
 
