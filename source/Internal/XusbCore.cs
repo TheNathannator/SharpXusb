@@ -293,7 +293,7 @@ namespace SharpXusb
             {
                 result = Ioctl.SendReceive(busHandle_Async, ioctl, inBuffer, inSize, outBuffer,
                     XusbInputWaitState.Size, out _, &overlapped);
-                if (result == HResult.E_Pending)
+                if (result == Win32Error.IoPending)
                 {
                     bool bResult = Kernel32.GetOverlappedResult(busHandle_Async, &overlapped, out int bytes, true);
                     if (!bResult)
