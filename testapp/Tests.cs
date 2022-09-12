@@ -318,7 +318,7 @@ namespace SharpXusbTestApp
                 timer.Reset();
 
                 Console.WriteLine("Wait State:");
-                waitState.ToConsole();
+                waitState.ToConsole(2);
             }
         }
 
@@ -338,7 +338,7 @@ namespace SharpXusbTestApp
                 timer.Reset();
 
                 Console.WriteLine("Wait State:");
-                waitState.ToConsole();
+                waitState.ToConsole(2);
             }
         }
 
