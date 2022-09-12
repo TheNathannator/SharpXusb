@@ -285,7 +285,7 @@ namespace SharpXusb
 
             var overlapped = new NativeOverlapped()
             {
-                EventHandle = m_waitHandles[deviceIndex].SafeWaitHandle.DangerousGetHandle()
+                EventHandle = GetWaitHandle(deviceIndex)
             };
 
             int result;
@@ -336,6 +336,11 @@ namespace SharpXusb
 
             m_waitHandles.Add(userIndex, new EventWaitHandle(false, EventResetMode.ManualReset));
             return true;
+        }
+
+        private static IntPtr GetWaitHandle(byte userIndex)
+        {
+            return m_waitHandles[userIndex].SafeWaitHandle.DangerousGetHandle();
         }
 
         /// <summary>
