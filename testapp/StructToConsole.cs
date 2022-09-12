@@ -6,11 +6,10 @@ namespace SharpXusbTestApp
 {
     static class StructToConsole
     {
-        private static Dictionary<int, string> indentations = new();
+        private static readonly Dictionary<int, string> indentations = new();
         private static string GetIndentation(int indentAmount)
         {
-            string indent;
-            if (!indentations.TryGetValue(indentAmount, out indent))
+            if (!indentations.TryGetValue(indentAmount, out string indent))
             {
                 indent = new string(' ', indentAmount);
                 indentations.Add(indentAmount, indent);
