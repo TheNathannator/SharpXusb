@@ -50,19 +50,8 @@ namespace SharpXusbTestApp
             {
                 case XusbBusInformationExType.Minimal:
                 {
-                    var minimal = busInfo.Minimal;
-                    Console.WriteLine($"{indent}unk1:        0x{minimal.unk1:X8}");
-                    Console.WriteLine($"{indent}unk2:        0x{minimal.unk2:X8}");
-                    Console.WriteLine($"{indent}unk3:        0x{minimal.unk3:X8}");
-                    Console.WriteLine($"{indent}unk4:        0x{minimal.unk4:X8}");
-                    Console.WriteLine($"{indent}unk5:        0x{minimal.unk5:X4}");
-                    Console.WriteLine($"{indent}VendorId:    0x{minimal.VendorId:X4}");
-                    Console.WriteLine($"{indent}ProductId:   0x{minimal.ProductId:X4}");
-                    Console.WriteLine($"{indent}unk8:        0x{minimal.unk8:X4}");
-                    Console.WriteLine($"{indent}unk9:        0x{minimal.unk9:X2}");
-                    Console.WriteLine($"{indent}unk10:       0x{minimal.unk10:X8}");
-                    Console.WriteLine($"{indent}unk11:       0x{minimal.unk11:X4}");
-                    Console.WriteLine($"{indent}unk12:       0x{minimal.unk12:X2}");
+                    Console.WriteLine($"{indent}Minimal:");
+                    busInfo.Minimal.ToConsole(indentAmount + 2);
                     break;
                 }
 
@@ -78,19 +67,7 @@ namespace SharpXusbTestApp
                     for (int i = 0; i < basic.Length; i++)
                     {
                         Console.WriteLine($"{indent}Basic[{i}]:");
-
-                        var element = basic[i];
-                        Console.WriteLine($"{indent}  unk1:       0x{element.unk1:X2}");
-                        Console.WriteLine($"{indent}  unk2:       0x{element.unk2:X8}");
-                        Console.WriteLine($"{indent}  unk3:       0x{element.unk3:X8}");
-                        Console.WriteLine($"{indent}  VendorId:   0x{element.VendorId:X4}");
-                        Console.WriteLine($"{indent}  ProductId:  0x{element.ProductId:X4}");
-                        Console.WriteLine($"{indent}  unk5:       0x{element.unk5:X8}");
-                        Console.WriteLine($"{indent}  unk6:       0x{element.unk6:X4}");
-                        Console.WriteLine($"{indent}  unk7:       0x{element.unk7:X8}");
-                        Console.WriteLine($"{indent}  unk8:       0x{element.unk8:X2}");
-                        Console.WriteLine($"{indent}  unk9:       0x{element.unk9:X4}");
-                        Console.WriteLine($"{indent}  unk10:      0x{element.unk10:X2}");
+                        basic[i].ToConsole(indentAmount + 2);
                     }
                     break;
                 }
@@ -107,23 +84,76 @@ namespace SharpXusbTestApp
                     for (int i = 0; i < full.Length; i++)
                     {
                         Console.WriteLine($"{indent}Full[{i}]:");
-
-                        var busElement = full[i];
-                        Console.WriteLine($"{indent}  unk1:  0x{busElement.unk1:X2}");
-                        Console.WriteLine($"{indent}  unk2:  0x{busElement.unk2:X2}");
-                        Console.WriteLine($"{indent}  unk3:  0x{busElement.unk3:X2}");
-
-                        var deviceList = busElement.DeviceList;
-                        for (int n = 0; n < deviceList.Length; n++)
-                        {
-                            var deviceElement = deviceList[n];
-                            Console.WriteLine($"{indent}  deviceList[{n}]:");
-                            Console.WriteLine($"{indent}    0x{deviceElement.unk1:X2}-{deviceElement.unk2:X2}-{deviceElement.unk3:X2}-{deviceElement.unk4:X2}-{deviceElement.unk5:X2}-{deviceElement.unk6:X2}-{deviceElement.unk7:X2}");
-                        }
+                        full[i].ToConsole(indentAmount + 2);
                     }
                     break;
                 }
             }
+        }
+
+        public static void ToConsole(this XusbBusInfoEx_Minimal minimal, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            Console.WriteLine($"{indent}unk1:       0x{minimal.unk1:X8}");
+            Console.WriteLine($"{indent}unk2:       0x{minimal.unk2:X8}");
+            Console.WriteLine($"{indent}unk3:       0x{minimal.unk3:X8}");
+            Console.WriteLine($"{indent}unk4:       0x{minimal.unk4:X8}");
+            Console.WriteLine($"{indent}unk5:       0x{minimal.unk5:X4}");
+            Console.WriteLine($"{indent}VendorId:   0x{minimal.VendorId:X4}");
+            Console.WriteLine($"{indent}ProductId:  0x{minimal.ProductId:X4}");
+            Console.WriteLine($"{indent}unk8:       0x{minimal.unk8:X4}");
+            Console.WriteLine($"{indent}unk9:       0x{minimal.unk9:X2}");
+            Console.WriteLine($"{indent}unk10:      0x{minimal.unk10:X8}");
+            Console.WriteLine($"{indent}unk11:      0x{minimal.unk11:X4}");
+            Console.WriteLine($"{indent}unk12:      0x{minimal.unk12:X2}");
+        }
+
+        public static void ToConsole(this XusbBusInfoEx_Basic basic, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            Console.WriteLine($"{indent}unk1:       0x{basic.unk1:X2}");
+            Console.WriteLine($"{indent}unk2:       0x{basic.unk2:X8}");
+            Console.WriteLine($"{indent}unk3:       0x{basic.unk3:X8}");
+            Console.WriteLine($"{indent}VendorId:   0x{basic.VendorId:X4}");
+            Console.WriteLine($"{indent}ProductId:  0x{basic.ProductId:X4}");
+            Console.WriteLine($"{indent}unk5:       0x{basic.unk5:X8}");
+            Console.WriteLine($"{indent}unk6:       0x{basic.unk6:X4}");
+            Console.WriteLine($"{indent}unk7:       0x{basic.unk7:X8}");
+            Console.WriteLine($"{indent}unk8:       0x{basic.unk8:X2}");
+            Console.WriteLine($"{indent}unk9:       0x{basic.unk9:X4}");
+            Console.WriteLine($"{indent}unk10:      0x{basic.unk10:X2}");
+        }
+
+        public static void ToConsole(this XusbBusInfoEx_Full full, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            Console.WriteLine($"{indent}unk1:  0x{full.unk1:X2}");
+            Console.WriteLine($"{indent}unk2:  0x{full.unk2:X2}");
+            Console.WriteLine($"{indent}unk3:  0x{full.unk3:X2}");
+
+            var deviceList = full.DeviceList;
+            for (int n = 0; n < deviceList.Length; n++)
+            {
+                var deviceElement = deviceList[n];
+                Console.WriteLine($"{indent}deviceList[{n}]:");
+                deviceElement.ToConsole(indentAmount + 2);
+            }
+        }
+
+        public static void ToConsole(this XusbBusInfoEx_Full_Sub sub, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            Console.WriteLine($"{indent}unk1:  0x{sub.unk1:X2}");
+            Console.WriteLine($"{indent}unk2:  0x{sub.unk2:X2}");
+            Console.WriteLine($"{indent}unk3:  0x{sub.unk3:X2}");
+            Console.WriteLine($"{indent}unk4:  0x{sub.unk4:X2}");
+            Console.WriteLine($"{indent}unk5:  0x{sub.unk5:X2}");
+            Console.WriteLine($"{indent}unk6:  0x{sub.unk6:X2}");
+            Console.WriteLine($"{indent}unk7:  0x{sub.unk7:X2}");
         }
 
         public static void ToConsole(this XusbLedState ledState, int indentAmount = 0)
@@ -136,33 +166,39 @@ namespace SharpXusbTestApp
 
         public static void ToConsole(this XusbInputState inputState, int indentAmount = 0)
         {
+            if (inputState.Version == (ushort)XusbDeviceVersion.v1_0)
+                inputState.State_v0.ToConsole(indentAmount);
+            else
+                inputState.State_v1.ToConsole(indentAmount);
+        }
+
+        public static void ToConsole(this XusbInputState_v0 inputState, int indentAmount = 0)
+        {
             string indent = GetIndentation(indentAmount);
 
-            if (inputState.Version == (ushort)XusbDeviceVersion.v1_0)
-            {
-                var state = inputState.State_v0;
-                Console.WriteLine($"{indent}Version:     0x{inputState.Version:X4}");
-                Console.WriteLine($"{indent}Status:      0x{state.Status:X2}");
-                Console.WriteLine($"{indent}unk1:        0x{state.unk1:X2}");
-                Console.WriteLine($"{indent}unk2:        0x{state.unk2:X2}");
-                Console.WriteLine($"{indent}Packet:      {state.PacketNumber}");
-                Console.WriteLine($"{indent}unk3:        0x{state.unk3:X2}");
+            Console.WriteLine($"{indent}Version:  0x{(ushort)XusbDeviceVersion.v1_0:X4}");
+            Console.WriteLine($"{indent}Status:   0x{inputState.Status:X2}");
+            Console.WriteLine($"{indent}unk1:     0x{inputState.unk1:X2}");
+            Console.WriteLine($"{indent}unk2:     0x{inputState.unk2:X2}");
+            Console.WriteLine($"{indent}Packet:   {inputState.PacketNumber}");
+            Console.WriteLine($"{indent}unk3:     0x{inputState.unk3:X2}");
 
-                state.Gamepad.ToConsole(indentAmount);
-            }
-            else
-            {
-                var state = inputState.State_v1;
-                Console.WriteLine($"{indent}Version:     0x{state.Version:X4}");
-                Console.WriteLine($"{indent}Status:      0x{state.Status:X2}");
-                Console.WriteLine($"{indent}unk1:        0x{state.unk1:X2}");
-                Console.WriteLine($"{indent}unk2:        0x{state.unk2:X2}");
-                Console.WriteLine($"{indent}Packet:      {state.PacketNumber}");
-                Console.WriteLine($"{indent}unk3:        0x{state.unk3:X2}");
-                Console.WriteLine($"{indent}unk4:        0x{state.unk4:X2}");
+            inputState.Gamepad.ToConsole(indentAmount);
+        }
 
-                state.Gamepad.ToConsole(indentAmount);
-            }
+        public static void ToConsole(this XusbInputState_v1 inputState, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            Console.WriteLine($"{indent}Version:  0x{inputState.Version:X4}");
+            Console.WriteLine($"{indent}Status:   0x{inputState.Status:X2}");
+            Console.WriteLine($"{indent}unk1:     0x{inputState.unk1:X2}");
+            Console.WriteLine($"{indent}unk2:     0x{inputState.unk2:X2}");
+            Console.WriteLine($"{indent}Packet:   {inputState.PacketNumber}");
+            Console.WriteLine($"{indent}unk3:     0x{inputState.unk3:X2}");
+            Console.WriteLine($"{indent}unk4:     0x{inputState.unk4:X2}");
+
+            inputState.Gamepad.ToConsole(indentAmount);
         }
 
         public static void ToConsole(this XusbGamepad gamepad, int indentAmount = 0)
@@ -200,36 +236,42 @@ namespace SharpXusbTestApp
             string indent = GetIndentation(indentAmount);
 
             if (capabilities.Version == (ushort)XusbDeviceVersion.ProcNotSupported)
-            {
                 Console.WriteLine($"{indent}This device does not support capability querying.");
-            }
             else if (capabilities.Version == (ushort)XusbDeviceVersion.v1_1)
-            {
-                var caps = capabilities.Capabilities_v1;
-                Console.WriteLine($"{indent}Version:     0x{caps.Version:X4}");
-                Console.WriteLine($"{indent}Type:        0x{caps.Type:X2} ({(XusbControllerType)caps.Type})");
-                Console.WriteLine($"{indent}SubType:     0x{caps.SubType:X2} ({(XusbControllerSubType)caps.SubType})");
-
-                caps.Gamepad.ToConsole(indentAmount);
-
-                caps.Vibration.ToConsole(indentAmount);
-            }
+                capabilities.Capabilities_v1.ToConsole();
             else
-            {
-                var caps = capabilities.Capabilities_v2;
-                Console.WriteLine($"{indent}Version:     0x{caps.Version:X4}");
-                Console.WriteLine($"{indent}Type:        0x{caps.Type:X2} ({(XusbControllerType)caps.Type})");
-                Console.WriteLine($"{indent}SubType:     0x{caps.SubType:X2} ({(XusbControllerSubType)caps.SubType})");
-                Console.WriteLine($"{indent}Flags:       0x{caps.Flags:X4} ({(XusbCapabilityFlags)caps.Flags})");
-                Console.WriteLine($"{indent}VendorId:    0x{caps.VendorId:X4}");
-                Console.WriteLine($"{indent}ProductId:   0x{caps.ProductId:X4}");
-                Console.WriteLine($"{indent}Revision:    0x{caps.Revision:X4}");
-                Console.WriteLine($"{indent}XusbId:      0x{caps.XusbId:X8}");
+                capabilities.Capabilities_v2.ToConsole();
+        }
 
-                caps.Gamepad.ToConsole(indentAmount);
+        public static void ToConsole(this XusbCapabilities_v1 capabilities, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
 
-                caps.Vibration.ToConsole(indentAmount);
-            }
+            Console.WriteLine($"{indent}Version:  0x{capabilities.Version:X4}");
+            Console.WriteLine($"{indent}Type:     0x{capabilities.Type:X2} ({(XusbControllerType)capabilities.Type})");
+            Console.WriteLine($"{indent}SubType:  0x{capabilities.SubType:X2} ({(XusbControllerSubType)capabilities.SubType})");
+
+            capabilities.Gamepad.ToConsole(indentAmount);
+
+            capabilities.Vibration.ToConsole(indentAmount);
+        }
+
+        public static void ToConsole(this XusbCapabilities_v2 capabilities, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            Console.WriteLine($"{indent}Version:    0x{capabilities.Version:X4}");
+            Console.WriteLine($"{indent}Type:       0x{capabilities.Type:X2} ({(XusbControllerType)capabilities.Type})");
+            Console.WriteLine($"{indent}SubType:    0x{capabilities.SubType:X2} ({(XusbControllerSubType)capabilities.SubType})");
+            Console.WriteLine($"{indent}Flags:      0x{capabilities.Flags:X4} ({(XusbCapabilityFlags)capabilities.Flags})");
+            Console.WriteLine($"{indent}VendorId:   0x{capabilities.VendorId:X4}");
+            Console.WriteLine($"{indent}ProductId:  0x{capabilities.ProductId:X4}");
+            Console.WriteLine($"{indent}Revision:   0x{capabilities.Revision:X4}");
+            Console.WriteLine($"{indent}XusbId:     0x{capabilities.XusbId:X8}");
+
+            capabilities.Gamepad.ToConsole(indentAmount);
+
+            capabilities.Vibration.ToConsole(indentAmount);
         }
 
         public static void ToConsole(this XusbBatteryInformation batteryInfo, int indentAmount = 0)
