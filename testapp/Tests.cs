@@ -85,15 +85,19 @@ namespace SharpXusbTestApp
                 }
 
                 var selectedBus = SelectDevice(busList, "bus");
-                int selectedTest = PromptTests(busTests);
-                if (selectedTest == 1)
-                {
-                    // User cancelled
-                    return;
-                }
 
-                // Run selected test
-                busTests[selectedTest - 2].func(selectedBus);
+                while (true)
+                {
+                    int selectedTest = PromptTests(busTests);
+                    if (selectedTest == 1)
+                    {
+                        // User cancelled
+                        break;
+                    }
+
+                    // Run selected test
+                    busTests[selectedTest - 2].func(selectedBus);
+                }
             }
         }
 
@@ -121,15 +125,19 @@ namespace SharpXusbTestApp
                 }
 
                 var selectedDevice = SelectDevice(deviceList, "device");
-                int selectedTest = PromptTests(deviceTests);
-                if (selectedTest == 1)
-                {
-                    // User cancelled
-                    return;
-                }
 
-                // Run selected test
-                deviceTests[selectedTest - 2].func(selectedDevice);
+                while (true)
+                {
+                    int selectedTest = PromptTests(deviceTests);
+                    if (selectedTest == 1)
+                    {
+                        // User cancelled
+                        break;
+                    }
+
+                    // Run selected test
+                    deviceTests[selectedTest - 2].func(selectedDevice);
+                }
             }
         }
 
