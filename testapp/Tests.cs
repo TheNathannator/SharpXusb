@@ -181,9 +181,9 @@ namespace SharpXusbTestApp
 
                 switch (choice)
                 {
-                    case 1: bus.GetInformationEx(XusbBusInformationExType.Minimal).ToConsole(XusbBusInformationExType.Minimal); break;
-                    case 2: bus.GetInformationEx(XusbBusInformationExType.Basic).ToConsole(XusbBusInformationExType.Basic); break;
-                    case 3: bus.GetInformationEx(XusbBusInformationExType.Full).ToConsole(XusbBusInformationExType.Full); break;
+                    case 1: bus.GetInformationEx(XusbBusInformationExType.Minimal).ToConsole(); break;
+                    case 2: bus.GetInformationEx(XusbBusInformationExType.Basic).ToConsole(); break;
+                    case 3: bus.GetInformationEx(XusbBusInformationExType.Full).ToConsole(); break;
                     case 4: return;
                 }
 

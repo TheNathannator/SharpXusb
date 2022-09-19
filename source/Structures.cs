@@ -490,16 +490,61 @@ namespace SharpXusb
         /// <summary>
         /// Buffer of data for the extended information.
         /// </summary>
+        // Privated to prevent overflows from external users
+        [FieldOffset(5)]
+        private unsafe fixed byte Buffer[944];
+
+        /// <summary>
+        /// Whether or not the buffer is empty.
+        /// </summary>
+        public bool IsEmpty => DataLength == 0;
+
+        /// <summary>
+        /// Whether or not the buffer contains minimal info.
+        /// </summary>
+        public bool IsMinimal => DataLength == MinimalSize;
+
+        /// <summary>
+        /// Whether or not the buffer contains basic info.
+        /// </summary>
+        public bool IsBasic => DataLength == BasicSize;
+
+        /// <summary>
+        /// Whether or not the buffer contains full info.
+        /// </summary>
+        public bool IsFull => DataLength == FullSize;
+
+        /// <summary>
+        /// Gets the data buffer as a managed byte array.
+        /// </summary>
         /// <remarks>
         /// The true type of this buffer varies based on the type of request this data was received from.
         /// Use the <see cref="Minimal"/>, <see cref="Basic"/>, and <see cref="Full"/> properties to get
         /// the proper types for each respective request.
         /// </remarks>
-        [FieldOffset(5)]
-        public unsafe fixed byte Buffer[944];
+        public unsafe byte[] RawData
+        {
+            get
+            {
+                if (IsEmpty)
+                {
+                    throw new InvalidOperationException("The data buffer is empty.");
+                }
+
+                fixed (byte* buffer = Buffer)
+                {
+                    var data = new byte[DataLength];
+                    for (int i = 0; i < DataLength; i++)
+                    {
+                        data[i] = buffer[i];
+                    }
+                    return data;
+                }
+            }
+        }
 
         /// <summary>
-        /// Gets <see cref="Buffer"/> as an <see cref="XusbBusInfoEx_Minimal"/> structure.
+        /// Gets the data buffer as an <see cref="XusbBusInfoEx_Minimal"/> structure.
         /// </summary>
         /// <remarks>
         /// Returns default data if no data was returned from the driver.
@@ -508,17 +553,13 @@ namespace SharpXusb
         {
             get
             {
-                if (DataLength != XusbBusInfoEx_Minimal.Size)
+                if (IsEmpty)
                 {
-                    if (DataLength == 0)
-                    {
-                        // TODO: See if there's a better way to handle this case
-                        return default;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("The buffer does not contain this type of info.");
-                    }
+                    throw new InvalidOperationException("The data buffer is empty.");
+                }
+                else if (!IsMinimal)
+                {
+                    throw new InvalidOperationException("The data buffer does not contain this type of info.");
                 }
 
                 fixed (byte* buffer = Buffer)
@@ -530,12 +571,7 @@ namespace SharpXusb
         }
 
         /// <summary>
-        /// The size of the list of buses.
-        /// </summary>
-        private const int listSize = 16;
-
-        /// <summary>
-        /// Gets <see cref="Buffer"/> as an <see cref="XusbBusInfoEx_Basic"/> array.
+        /// Gets the data buffer as an <see cref="XusbBusInfoEx_Basic"/> array.
         /// </summary>
         /// <remarks>
         /// Returns null if no data was returned from the driver.
@@ -544,24 +580,20 @@ namespace SharpXusb
         {
             get
             {
-                if (DataLength != XusbBusInfoEx_Basic.Size * listSize)
+                if (IsEmpty)
                 {
-                    if (DataLength == 0)
-                    {
-                        // TODO: See if there's a better way to handle this case
-                        return null;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("The buffer does not contain this type of info.");
-                    }
+                    throw new InvalidOperationException("The data buffer is empty.");
+                }
+                else if (!IsBasic)
+                {
+                    throw new InvalidOperationException("The data buffer does not contain this type of info.");
                 }
 
                 fixed (byte* buffer = Buffer)
                 {
                     XusbBusInfoEx_Basic* typedPtr = (XusbBusInfoEx_Basic*)buffer;
-                    var array = new XusbBusInfoEx_Basic[listSize];
-                    for (int i = 0; i < listSize; i++)
+                    var array = new XusbBusInfoEx_Basic[ListSize];
+                    for (int i = 0; i < ListSize; i++)
                     {
                         array[i] = typedPtr[i];
                     }
@@ -571,7 +603,7 @@ namespace SharpXusb
         }
 
         /// <summary>
-        /// Gets <see cref="Buffer"/> as an <see cref="XusbBusInfoEx_Full"/> array.
+        /// Gets the data buffer as an <see cref="XusbBusInfoEx_Full"/> array.
         /// </summary>
         /// <remarks>
         /// Returns null if no data was returned from the driver.
@@ -580,24 +612,20 @@ namespace SharpXusb
         {
             get
             {
-                if (DataLength != XusbBusInfoEx_Full.Size * listSize)
+                if (IsEmpty)
                 {
-                    if (DataLength == 0)
-                    {
-                        // TODO: See if there's a better way to handle this case
-                        return default;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("The buffer does not contain this type of info.");
-                    }
+                    throw new InvalidOperationException("The data buffer is empty.");
+                }
+                else if (!IsFull)
+                {
+                    throw new InvalidOperationException("The data buffer does not contain this type of info.");
                 }
 
                 fixed (byte* buffer = Buffer)
                 {
                     XusbBusInfoEx_Full* typedPtr = (XusbBusInfoEx_Full*)buffer;
-                    var array = new XusbBusInfoEx_Full[listSize];
-                    for (int i = 0; i < listSize; i++)
+                    var array = new XusbBusInfoEx_Full[ListSize];
+                    for (int i = 0; i < ListSize; i++)
                     {
                         array[i] = typedPtr[i];
                     }
@@ -610,6 +638,26 @@ namespace SharpXusb
         /// Size of this structure in bytes.
         /// </summary>
         internal const int Size = 949;
+
+        /// <summary>
+        /// The size of the list of buses.
+        /// </summary>
+        internal const int ListSize = 16;
+
+        /// <summary>
+        /// Size reported when receiving minimal info.
+        /// </summary>
+        internal const int MinimalSize = XusbBusInfoEx_Minimal.Size;
+
+        /// <summary>
+        /// Size reported when receiving basic info.
+        /// </summary>
+        internal const int BasicSize = XusbBusInfoEx_Basic.Size * ListSize;
+
+        /// <summary>
+        /// Size reported when receiving full info.
+        /// </summary>
+        internal const int FullSize = XusbBusInfoEx_Full.Size * ListSize;
     }
 
     /// <summary>

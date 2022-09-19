@@ -31,7 +31,7 @@ namespace SharpXusbTestApp
             Console.WriteLine($"{indent}ProductId:    0x{busInfo.ProductId:X4}");
         }
 
-        public static void ToConsole(this XusbBusInfoEx busInfo, XusbBusInformationExType type, int indentAmount = 0)
+        public static void ToConsole(this XusbBusInfoEx busInfo, int indentAmount = 0)
         {
             string indent = GetIndentation(indentAmount);
 
@@ -39,54 +39,38 @@ namespace SharpXusbTestApp
             Console.WriteLine($"{indent}Failure:     {busInfo.Failure}");
             Console.WriteLine($"{indent}DataLength:  {busInfo.DataLength}");
 
-            if (busInfo.DataLength == 0)
+            if (busInfo.IsEmpty)
             {
                 Console.WriteLine($"{indent}Could not retrieve further extended bus information.");
                 return;
             }
-
-            switch (type)
+            else if (busInfo.IsMinimal)
             {
-                case XusbBusInformationExType.Minimal:
+                Console.WriteLine($"{indent}Minimal:");
+                busInfo.Minimal.ToConsole(indentAmount + 2);
+            }
+            else if (busInfo.IsBasic)
+            {
+                var basic = busInfo.Basic;
+                for (int i = 0; i < basic.Length; i++)
                 {
-                    Console.WriteLine($"{indent}Minimal:");
-                    busInfo.Minimal.ToConsole(indentAmount + 2);
-                    break;
+                    Console.WriteLine($"{indent}Basic[{i}]:");
+                    basic[i].ToConsole(indentAmount + 2);
                 }
-
-                case XusbBusInformationExType.Basic:
+            }
+            else if (busInfo.IsFull)
+            {
+                var full = busInfo.Full;
+                for (int i = 0; i < full.Length; i++)
                 {
-                    var basic = busInfo.Basic;
-                    if (basic is null)
-                    {
-                        Console.WriteLine($"{indent}No further data supplied by the driver.");
-                        return;
-                    }
-
-                    for (int i = 0; i < basic.Length; i++)
-                    {
-                        Console.WriteLine($"{indent}Basic[{i}]:");
-                        basic[i].ToConsole(indentAmount + 2);
-                    }
-                    break;
+                    Console.WriteLine($"{indent}Full[{i}]:");
+                    full[i].ToConsole(indentAmount + 2);
                 }
-
-                case XusbBusInformationExType.Full:
-                {
-                    var full = busInfo.Full;
-                    if (full is null)
-                    {
-                        Console.WriteLine($"{indent}No further data supplied by the driver.");
-                        return;
-                    }
-
-                    for (int i = 0; i < full.Length; i++)
-                    {
-                        Console.WriteLine($"{indent}Full[{i}]:");
-                        full[i].ToConsole(indentAmount + 2);
-                    }
-                    break;
-                }
+            }
+            else
+            {
+                Console.WriteLine($"{indent}Unknown bus info type! Writing raw data.");
+                busInfo.RawData.ToConsole();
             }
         }
 
@@ -290,6 +274,34 @@ namespace SharpXusbTestApp
             Console.WriteLine($"{indent}VendorId:   0x{audioInfo.VendorId:X4}");
             Console.WriteLine($"{indent}ProductId:  0x{audioInfo.ProductId:X4}");
             Console.WriteLine($"{indent}unk:        0x{audioInfo.unk:X4}");
+        }
+
+        public static void ToConsole(this byte[] array, int indentAmount = 0)
+        {
+            string indent = GetIndentation(indentAmount);
+
+            int index = 0;
+            int increment = 0; // For doing 16 elements per line
+            Console.Write(indent);
+            while (index < array.Length - 1)
+            {
+                if (increment < 15)
+                {
+                    // Continue on same line
+                    Console.Write($"{array[index]:X2}-");
+                    increment++;
+                }
+                else
+                {
+                    // End line and create a new one
+                    Console.WriteLine($"{array[index]:X2}");
+                    Console.Write(indent);
+                    increment = 0;
+                }
+                index++;
+            }
+            // Write last element in the array without the hyphen at the start
+            Console.WriteLine($"{array[index]:X2}");
         }
     }
 }
