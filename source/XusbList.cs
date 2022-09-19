@@ -10,6 +10,17 @@ namespace SharpXusb
         private static readonly object m_listLock = new object();
         private static readonly Dictionary<byte, XusbDevice> m_deviceList = new Dictionary<byte, XusbDevice>();
         private static readonly Dictionary<byte, XusbBus> m_busList = new Dictionary<byte, XusbBus>();
+        private static readonly Dictionary<byte, byte> m_ledStateToIndex = new Dictionary<byte, byte>()
+        {
+            {(byte)XusbLedSetting.Player1_Blink, 0},
+            {(byte)XusbLedSetting.Player2_Blink, 1},
+            {(byte)XusbLedSetting.Player3_Blink, 2},
+            {(byte)XusbLedSetting.Player4_Blink, 3},
+            {(byte)XusbLedSetting.Player1, 0},
+            {(byte)XusbLedSetting.Player2, 1},
+            {(byte)XusbLedSetting.Player3, 2},
+            {(byte)XusbLedSetting.Player4, 3}
+        };
 
         public static Dictionary<byte, XusbDevice> DeviceList
         {
@@ -107,12 +118,11 @@ namespace SharpXusb
 
                 Debug.WriteLine($"Max device count: {busInfo.MaxCount}");
                 Debug.WriteLine($"Connected device count: {busInfo.DeviceCount}");
-                for (byte userIndex = 0; userIndex < busInfo.MaxCount; userIndex++)
+                for (byte indexOnBus = 0; indexOnBus < busInfo.MaxCount; indexOnBus++)
                 {
-                    Debug.WriteLine($"Checking for device at index {userIndex}");
-                    var device = new XusbDevice(bus, userIndex);
-
-                    if (!device.TryGetInputState(out var inputState))
+                    byte userIndex = 0xFF;
+                    Debug.WriteLine($"Checking for device at index {indexOnBus}");
+                    if (!bus.TryGetDeviceInputState(indexOnBus, out var inputState))
                     {
                         Debug.WriteLine($"Couldn't get input state, skipping.");
                         continue;
@@ -120,8 +130,38 @@ namespace SharpXusb
 
                     Debug.Assert(inputState.Version != (ushort)XusbDeviceVersion.ProcNotSupported, "Invalid device version detected, check for bugs!");
 
+                    // Attempt to use device's LED state to determine the user index
+                    if (bus.TryGetDeviceLedState(indexOnBus, out var ledState))
+                    {
+                        if (!m_ledStateToIndex.TryGetValue(ledState.LEDState, out userIndex))
+                        {
+                            Debug.WriteLine($"Could not get user index for LED state {(XusbLedSetting)ledState.LEDState} ({ledState.LEDState}).");
+                            userIndex = 0xFF;
+                        }
+                    }
+
+                    // If user index couldn't be determined, use next-available user index
+                    if (userIndex == 0xFF)
+                    {
+                        for (byte i = 0; i < 0xFF; i++)
+                        {
+                            if (!m_deviceList.ContainsKey(i))
+                            {
+                                userIndex = i;
+                                break;
+                            }
+                        }
+
+                        if (userIndex == 0xFF)
+                        {
+                            Debug.WriteLine("Maximum device count reached! Cannot add this device.");
+                            break;
+                        }
+                    }
+
                     try
                     {
+                        var device = new XusbDevice(bus, userIndex, indexOnBus);
                         m_deviceList.Add(userIndex, device);
                     }
                     catch (Exception ex)

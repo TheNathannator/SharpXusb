@@ -136,6 +136,12 @@ namespace SharpXusb
             Utilities.ThrowOnError(result);
         }
 
+        public bool TryGetDeviceLedState(byte userIndex, out XusbLedState ledState)
+        {
+            int result = XusbCore.Device_GetLedState(Handle, Version, userIndex, out ledState);
+            return result == 0;
+        }
+
         public XusbLedState GetDeviceLedState(byte userIndex)
         {
             int result = XusbCore.Device_GetLedState(Handle, Version, userIndex, out var ledState);
