@@ -94,8 +94,7 @@ namespace SharpXusbTestApp
                 string entry = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(entry) || !int.TryParse(entry, out int selection)
-                    || selection < (args.Length == 1 ? 0 : 1)
-                    || (args.Length == 1 ? (selection < min || selection > max) : selection >= args.Length))
+                    || (args.Length == 1 ? (selection < min || selection > max) : (selection < 1 || selection >= args.Length)))
                 {
                     Console.WriteLine("Invalid entry, please try again.");
                 }
