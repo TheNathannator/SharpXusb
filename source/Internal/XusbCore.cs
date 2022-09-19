@@ -44,13 +44,12 @@ namespace SharpXusb
             switch (version)
             {
                 case XusbDeviceVersion.v1_0:
-                case XusbDeviceVersion.v1_1:
-                    break;
-
-                default:
                     // Not supported, but don't want to throw an exception as a result
                     data = default;
                     return Win32Error.Success;
+
+                default:
+                    break;
             }
 #endif
 
