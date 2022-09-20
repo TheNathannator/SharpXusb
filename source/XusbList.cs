@@ -8,8 +8,8 @@ namespace SharpXusb
     public static class XusbList
     {
         private static readonly object m_listLock = new object();
-        private static readonly Dictionary<byte, XusbDevice> m_deviceList = new Dictionary<byte, XusbDevice>();
-        private static readonly Dictionary<byte, XusbBus> m_busList = new Dictionary<byte, XusbBus>();
+        private static readonly SortedDictionary<byte, XusbDevice> m_deviceList = new SortedDictionary<byte, XusbDevice>();
+        private static readonly SortedDictionary<byte, XusbBus> m_busList = new SortedDictionary<byte, XusbBus>();
         private static readonly Dictionary<byte, byte> m_ledStateToIndex = new Dictionary<byte, byte>()
         {
             {(byte)XusbLedSetting.Player1_Blink, 0},
@@ -22,7 +22,7 @@ namespace SharpXusb
             {(byte)XusbLedSetting.Player4, 3}
         };
 
-        public static Dictionary<byte, XusbDevice> DeviceList
+        public static SortedDictionary<byte, XusbDevice> DeviceList
         {
             get
             {
@@ -31,7 +31,7 @@ namespace SharpXusb
             }
         }
 
-        public static Dictionary<byte, XusbBus> BusList
+        public static SortedDictionary<byte, XusbBus> BusList
         {
             get
             {
@@ -50,7 +50,7 @@ namespace SharpXusb
             return ListHelper(m_busList, busIndex);
         }
 
-        private static T ListHelper<T>(Dictionary<byte, T> list, byte index) where T : class
+        private static T ListHelper<T>(SortedDictionary<byte, T> list, byte index) where T : class
         {
             lock (m_listLock)
             {
