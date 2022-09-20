@@ -157,11 +157,12 @@ namespace SharpXusb
             return audioInfo;
         }
 
-        public string GetDeviceAudioDeviceString(byte userIndex)
-        {
-            var audioInfo = GetDeviceAudioDeviceInformation(userIndex);
-            return $"USB\\VID_{audioInfo.VendorId:X4}&PID_{audioInfo.ProductId:X4}&IA_{audioInfo.unk:X2}";
-        }
+        // TODO: Things are a lot more involved than this
+        // public string GetDeviceAudioDeviceString(byte userIndex)
+        // {
+        //     var audioInfo = GetDeviceAudioDeviceInformation(userIndex);
+        //     return $"USB\\VID_{audioInfo.VendorId:X4}&PID_{audioInfo.ProductId:X4}&IA_{audioInfo.unk:X2}";
+        // }
 
         public XusbInputState WaitForDeviceGuideButton(byte userIndex)
         {
