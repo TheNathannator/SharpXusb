@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 
 namespace SharpXusb
 {
-    public sealed class XusbDevice : IDisposable
+    public sealed class XusbDevice
     {
         private XusbBus m_bus;
         private readonly byte m_userIndex;
         private readonly byte m_indexOnBus;
         private EventWaitHandle m_waitHandle;
-        private bool m_isDisposed = false;
 
         public XusbBus AssociatedBus => m_bus;
         public byte UserIndex => m_userIndex;
@@ -22,11 +21,6 @@ namespace SharpXusb
             m_bus = bus;
             m_userIndex = deviceIndex;
             m_indexOnBus = indexOnBus;
-        }
-
-        ~XusbDevice()
-        {
-            Dispose(false);
         }
 
         public XusbInputState GetInputState() => m_bus.GetDeviceInputState(m_indexOnBus);
@@ -55,28 +49,5 @@ namespace SharpXusb
         public void CancelWait() => m_bus.CancelWait(m_indexOnBus);
 
         public void PowerOff() => m_bus.PowerOffDevice(m_indexOnBus);
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (!m_isDisposed)
-            {
-                if (disposing)
-                {
-                    m_bus?.Dispose();
-                    m_bus = null;
-
-                    m_waitHandle.Dispose();
-                    m_waitHandle = null;
-                }
-
-                m_isDisposed = true;
-            }
-        }
     }
 }
