@@ -270,6 +270,7 @@ namespace SharpXusb
                 XusbBuffer_Common.Size, out inputState);
         }
 
+        // TODO: This doesn't seem to work properly
         public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte indexOnBus, byte userIndex,
             out XusbInputState inputState)
         {

@@ -183,28 +183,29 @@ namespace SharpXusb
             });
         }
 
-        public static int WaitForInput(byte userIndex, out XusbInputState inputState)
-        {
-            var device = XusbList.GetDevice(userIndex);
-            if (device != null)
-            {
-                return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle,
-                    device.IndexOnBus, userIndex, out inputState);
-            }
-            else
-            {
-                inputState = default;
-                return Win32Error.DeviceNotConnected;
-            }
-        }
+        // TODO
+        // public static int WaitForInput(byte userIndex, out XusbInputState inputState)
+        // {
+        //     var device = XusbList.GetDevice(userIndex);
+        //     if (device != null)
+        //     {
+        //         return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle,
+        //             device.IndexOnBus, userIndex, out inputState);
+        //     }
+        //     else
+        //     {
+        //         inputState = default;
+        //         return Win32Error.DeviceNotConnected;
+        //     }
+        // }
 
-        public static Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
-        {
-            return Task.Run(() => {
-                int result = WaitForInput(userIndex, out var inputState);
-                return (result, inputState);
-            });
-        }
+        // public static Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
+        // {
+        //     return Task.Run(() => {
+        //         int result = WaitForInput(userIndex, out var inputState);
+        //         return (result, inputState);
+        //     });
+        // }
 
         public static void CancelWait(byte userIndex)
         {
