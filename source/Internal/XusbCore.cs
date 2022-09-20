@@ -381,7 +381,7 @@ namespace SharpXusb
 
             var buffer = new XusbBuffer_Common()
             {
-                Version = (ushort)version,
+                Version = (ushort)XusbDeviceVersion.v1_2,
                 DeviceIndex = deviceIndex
             };
 
