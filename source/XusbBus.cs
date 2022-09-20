@@ -191,6 +191,9 @@ namespace SharpXusb
             {
                 m_handle?.Dispose();
                 m_handle = null;
+
+                m_handleAsync?.Dispose();
+                m_handleAsync = null;
             }
         }
     }
