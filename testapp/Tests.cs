@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using SharpXusb;
 
 namespace SharpXusbTestApp
@@ -315,41 +316,112 @@ namespace SharpXusbTestApp
         {
             Utilities.CycleMenu("XUSB Device - Wait For Guide Button");
 
-            Device_WaitCommon(() => device.WaitForGuideButton());
+            Device_WaitCommon(device, (dev) => dev.WaitForGuideButtonAsync());
         }
 
         public unsafe static void Device_WaitForInput(XusbDevice device)
         {
             Utilities.CycleMenu("XUSB Device - Wait for Input");
 
-            Device_WaitCommon(() => device.WaitForInput());
+            Device_WaitCommon(device, (dev) => dev.WaitForInputAsync());
         }
 
-        private unsafe static void Device_WaitCommon(Func<XusbInputState> func)
+        private static void Device_WaitCommon(XusbDevice device, Func<XusbDevice, Task<XusbInputState>> func)
         {
-            Console.WriteLine("Press any key to stop the test and return to the selection.");
+            Console.WriteLine("Press any key to cancel the wait and exit the test.");
+            Console.WriteLine("Press Numpad 0 to toggle whether or not to automatically repeat the wait.");
 
             var timer = new Stopwatch();
             int cursorPosition = Console.CursorTop;
-            string timeString = "";
-            while (!Console.KeyAvailable)
+            string currentTimeString;
+            string finalTimeString;
+            string exitString1 = "Press Enter to go back to the previous menu, or press any other key to repeat this test.";
+            string exitString2 = "Press Numpad 0 to repeat the test and automatically repeat in the future.";
+            XusbInputState waitState = default;
+            bool exit = false;
+            bool immediateRepeat = false;
+            while (true)
             {
-                Console.SetCursorPosition(0, cursorPosition);
-
                 timer.Start();
-                var waitState = func();
+                var waitTask = func(device);
+                while (true)
+                {
+                    Console.SetCursorPosition(0, cursorPosition);
+                    currentTimeString = $"Time: {timer.ElapsedMilliseconds} ms";
+                    Console.WriteLine(currentTimeString);
+
+                    if (Console.KeyAvailable)
+                    {
+                        var key = Console.ReadKey().Key;
+                        if (key == ConsoleKey.Enter)
+                        {
+                            device.CancelWait();
+                            exit = true;
+                            break;
+                        }
+                        else if (key == ConsoleKey.NumPad0)
+                        {
+                            immediateRepeat = !immediateRepeat;
+                        }
+                    }
+
+                    if (waitTask.IsCompleted)
+                    {
+                        waitState = waitTask.Result;
+                        break;
+                    }
+                }
                 timer.Stop();
 
-                // Clear line
-                Console.WriteLine(new string(' ', timeString.Length));
+                // Clear current time
+                Console.SetCursorPosition(0, cursorPosition);
+                Console.WriteLine(new string(' ', currentTimeString.Length));
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
 
-                timeString = $"Waited for {timer.ElapsedMilliseconds} ms";
-                Console.WriteLine(timeString);
+                finalTimeString = $"Waited for {timer.ElapsedMilliseconds} ms";
+                Console.WriteLine(finalTimeString);
                 timer.Reset();
 
                 Console.WriteLine("Input State:");
                 waitState.ToConsole(2);
+
+                if (exit)
+                {
+                    return;
+                }
+
+                if (immediateRepeat)
+                {
+                    // Clear final time
+                    Console.SetCursorPosition(0, cursorPosition);
+                    Console.WriteLine(new string(' ', finalTimeString.Length));
+                    Console.SetCursorPosition(0, Console.CursorTop - 1);
+                    continue;
+                }
+
+                Console.WriteLine(exitString1);
+                var exitKey = Utilities.WaitForKey(exitString2);
+                if (exitKey == ConsoleKey.Enter)
+                {
+                    return;
+                }
+                else
+                {
+                    if (exitKey == ConsoleKey.NumPad0)
+                    {
+                        immediateRepeat = true;
+                    }
+
+                    // Clear exit message
+                    Console.SetCursorPosition(0, Console.CursorTop - 2);
+                    Console.WriteLine(new string(' ', exitString1.Length));
+                    Console.WriteLine(new string(' ', exitString2.Length));
+
+                    // Clear final time
+                    Console.SetCursorPosition(0, cursorPosition);
+                    Console.WriteLine(new string(' ', finalTimeString.Length));
+                    Console.SetCursorPosition(0, Console.CursorTop - 1);
+                }
             }
         }
 
