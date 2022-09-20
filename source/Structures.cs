@@ -143,7 +143,7 @@ namespace SharpXusb
         {
             get
             {
-                fixed (ushort* ptr = &Buttons)
+                fixed (XusbGamepadEx* ptr = &this)
                 {
                     return *(XusbGamepad*)ptr;
                 }
