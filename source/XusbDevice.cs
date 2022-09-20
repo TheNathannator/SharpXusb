@@ -6,10 +6,9 @@ namespace SharpXusb
 {
     public sealed class XusbDevice
     {
-        private XusbBus m_bus;
+        private readonly XusbBus m_bus;
         private readonly byte m_userIndex;
         private readonly byte m_indexOnBus;
-        private EventWaitHandle m_waitHandle;
 
         public XusbBus AssociatedBus => m_bus;
         public byte UserIndex => m_userIndex;

@@ -13,7 +13,7 @@ namespace SharpXusb
     {
         private SafeObjectHandle m_handle = null;
         private SafeObjectHandle m_handleAsync = null;
-        private XusbDeviceVersion m_version;
+        private readonly XusbDeviceVersion m_version;
 
         public XusbDeviceVersion Version
         {
