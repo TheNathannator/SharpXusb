@@ -29,115 +29,32 @@ namespace SharpXusb
             Dispose(false);
         }
 
-        public XusbInputState GetInputState()
-        {
-            int result = XusbCore.Device_GetInputState(m_bus.Handle, Version, m_indexOnBus, out var state);
-            Utilities.ThrowOnError(result);
-            return state;
-        }
+        public XusbInputState GetInputState() => m_bus.GetDeviceInputState(m_indexOnBus);
+        public bool TryGetInputState(out XusbInputState state) => m_bus.TryGetDeviceInputState(m_indexOnBus, out state);
 
-        public bool TryGetInputState(out XusbInputState state)
-        {
-            int result = XusbCore.Device_GetInputState(m_bus.Handle, Version, m_indexOnBus, out state);
-            return result == Win32Error.Success;
-        }
+        public void SetState(XusbLedSetting ledState, XusbVibration vibration, XusbSetStateFlags flags) => m_bus.SetDeviceState(m_indexOnBus, ledState, vibration, flags);
+        public void SetState(XusbLedSetting ledState, XusbVibration vibration) => m_bus.SetDeviceState(m_indexOnBus, ledState, vibration);
+        public void SetState(XusbVibration vibration) => m_bus.SetDeviceState(m_indexOnBus, vibration);
+        public void SetState(XusbLedSetting ledState) => m_bus.SetDeviceState(m_indexOnBus, ledState);
 
-        public void SetState(XusbLedSetting ledState, XusbVibration vibration)
-        {
-            int result = XusbCore.Device_SetState(m_bus.Handle, m_indexOnBus, ledState, vibration);
-            Utilities.ThrowOnError(result);
-        }
+        public XusbLedState GetLedState() => m_bus.GetDeviceLedState(m_indexOnBus);
 
-        public void SetState(XusbLedSetting ledState, XusbVibration vibration, XusbSetStateFlags flags)
-        {
-            int result = XusbCore.Device_SetState(m_bus.Handle, m_indexOnBus, ledState, vibration, flags);
-            Utilities.ThrowOnError(result);
-        }
+        public XusbCapabilities GetCapabilities() => m_bus.GetDeviceCapabilities(m_indexOnBus);
 
-        public void SetState(XusbVibration vibration)
-        {
-            int result = XusbCore.Device_SetState(m_bus.Handle, m_indexOnBus, vibration);
-            Utilities.ThrowOnError(result);
-        }
+        public XusbBatteryInformation GetBatteryInformation() => m_bus.GetDeviceBatteryInformation(m_indexOnBus);
+        public XusbBatteryInformation GetBatteryInformation(XusbSubDevice subDevice) => m_bus.GetDeviceBatteryInformation(m_indexOnBus, subDevice);
 
-        public void SetState(XusbLedSetting ledState)
-        {
-            int result = XusbCore.Device_SetState(m_bus.Handle, m_indexOnBus, ledState);
-            Utilities.ThrowOnError(result);
-        }
+        public XusbAudioDeviceInformation GetAudioDeviceInformation() => m_bus.GetDeviceAudioDeviceInformation(m_indexOnBus);
 
-        public XusbLedState GetLedState()
-        {
-            int result = XusbCore.Device_GetLedState(m_bus.Handle, Version, m_indexOnBus, out var ledState);
-            Utilities.ThrowOnError(result);
-            return ledState;
-        }
+        public XusbInputState WaitForGuideButton() => m_bus.WaitForDeviceGuideButton(m_indexOnBus);
+        public Task<XusbInputState> WaitForGuideButtonAsync() => m_bus.WaitForDeviceGuideButtonAsync(m_indexOnBus);
 
-        public XusbCapabilities GetCapabilities()
-        {
-            int result = XusbCore.Device_GetCapabilities(m_bus.Handle, Version, m_indexOnBus, out var capabilities);
-            Utilities.ThrowOnError(result);
-            return capabilities;
-        }
+        public XusbInputState WaitForInput() => m_bus.WaitForDeviceInput(m_indexOnBus);
+        public Task<XusbInputState> WaitForInputAsync() => m_bus.WaitForDeviceInputAsync(m_indexOnBus);
 
-        public XusbBatteryInformation GetBatteryInformation()
-        {
-            return GetBatteryInformation(XusbSubDevice.Gamepad);
-        }
+        public void CancelWait() => m_bus.CancelWait(m_indexOnBus);
 
-        public XusbBatteryInformation GetBatteryInformation(XusbSubDevice subDevice)
-        {
-            int result = XusbCore.Device_GetBatteryInformation(m_bus.Handle, Version, m_indexOnBus,
-                out var batteryInfo, subDevice);
-            Utilities.ThrowOnError(result);
-            return batteryInfo;
-        }
-
-        public XusbAudioDeviceInformation GetAudioDeviceInformation()
-        {
-            int result = XusbCore.Device_GetAudioDeviceInformation(m_bus.Handle, Version, m_indexOnBus,
-                out var audioInfo);
-            Utilities.ThrowOnError(result);
-            return audioInfo;
-        }
-
-        public XusbInputState WaitForGuideButton()
-        {
-            int result = XusbCore.Device_WaitForGuideButton(m_bus.AsyncHandle, m_indexOnBus, out var inputState);
-            Utilities.ThrowOnError(result);
-            return inputState;
-        }
-
-        public Task<XusbInputState> WaitForGuideButtonAsync()
-        {
-            return Task.Run(() => WaitForGuideButton());
-        }
-
-        public XusbInputState WaitForInput()
-        {
-            int result = XusbCore.Device_WaitForInput(m_bus.AsyncHandle, m_indexOnBus, out var inputState);
-            Utilities.ThrowOnError(result);
-            return inputState;
-        }
-
-        public Task<XusbInputState> WaitForInputAsync()
-        {
-            return Task.Run(() => WaitForInput());
-        }
-
-        public void CancelWait()
-        {
-            XusbCore.Device_CancelWait(m_indexOnBus);
-        }
-
-        public void PowerOff()
-        {
-            int result = XusbCore.Device_PowerOff(m_bus.Handle, Version, m_indexOnBus);
-            if (result != Win32Error.DeviceNotConnected)
-            {
-                Utilities.ThrowOnError(result);
-            }
-        }
+        public void PowerOff() => m_bus.PowerOffDevice(m_indexOnBus);
 
         public void Dispose()
         {
