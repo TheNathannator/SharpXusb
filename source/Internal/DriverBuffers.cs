@@ -18,7 +18,7 @@ namespace SharpXusb
         /// Device index to query.
         /// </summary>
         [FieldOffset(2)]
-        public byte DeviceIndex;
+        public byte IndexOnBus;
 
         /// <summary>
         /// Size of this structure in bytes.
@@ -42,7 +42,7 @@ namespace SharpXusb
         /// Device index to query.
         /// </summary>
         [FieldOffset(2)]
-        public byte DeviceIndex;
+        public byte IndexOnBus;
 
         /// <summary>
         /// Sub-device to query.
@@ -69,7 +69,7 @@ namespace SharpXusb
         /// Device index to query.
         /// </summary>
         [FieldOffset(0)]
-        public byte DeviceIndex;
+        public byte IndexOnBus;
 
         /// <summary>
         /// State to set the controller LED to.
@@ -117,7 +117,7 @@ namespace SharpXusb
         /// Device index to query.
         /// </summary>
         [FieldOffset(2)]
-        public byte DeviceIndex;
+        public byte IndexOnBus;
 
         [FieldOffset(3)]
         public byte unk;

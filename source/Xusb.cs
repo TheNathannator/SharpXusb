@@ -40,7 +40,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_GetInputState(device.AssociatedBus.Handle, device.Version, userIndex, out state);
+                return XusbCore.Device_GetInputState(device.AssociatedBus.Handle, device.Version, device.IndexOnBus, out state);
             }
             else
             {
@@ -54,7 +54,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_SetState(device.AssociatedBus.Handle, userIndex, ledState, vibration);
+                return XusbCore.Device_SetState(device.AssociatedBus.Handle, device.IndexOnBus, ledState, vibration);
             }
             else
             {
@@ -67,7 +67,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_SetState(device.AssociatedBus.Handle, userIndex, ledState, vibration, flags);
+                return XusbCore.Device_SetState(device.AssociatedBus.Handle, device.IndexOnBus, ledState, vibration, flags);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_SetState(device.AssociatedBus.Handle, userIndex, vibration);
+                return XusbCore.Device_SetState(device.AssociatedBus.Handle, device.IndexOnBus, vibration);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_SetState(device.AssociatedBus.Handle, userIndex, ledState);
+                return XusbCore.Device_SetState(device.AssociatedBus.Handle, device.IndexOnBus, ledState);
             }
             else
             {
@@ -106,7 +106,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_GetLedState(device.AssociatedBus.Handle, device.Version, userIndex, out ledState);
+                return XusbCore.Device_GetLedState(device.AssociatedBus.Handle, device.Version, device.IndexOnBus, out ledState);
             }
             else
             {
@@ -120,7 +120,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_GetCapabilities(device.AssociatedBus.Handle, device.Version, userIndex, out capabilities);
+                return XusbCore.Device_GetCapabilities(device.AssociatedBus.Handle, device.Version, device.IndexOnBus, out capabilities);
             }
             else
             {
@@ -135,7 +135,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_GetBatteryInformation(device.AssociatedBus.Handle, device.Version, userIndex,
+                return XusbCore.Device_GetBatteryInformation(device.AssociatedBus.Handle, device.Version, device.IndexOnBus,
                     out batteryInfo, subDevice);
             }
             else
@@ -150,7 +150,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                return XusbCore.Device_GetAudioDeviceInformation(device.AssociatedBus.Handle, device.Version, userIndex,
+                return XusbCore.Device_GetAudioDeviceInformation(device.AssociatedBus.Handle, device.Version, device.IndexOnBus,
                     out audioInfo);
             }
             else
@@ -166,7 +166,7 @@ namespace SharpXusb
             if (device != null)
             {
                 return XusbCore.Device_WaitForGuideButton(device.AssociatedBus.AsyncHandle,
-                    userIndex, out inputState);
+                    device.IndexOnBus, userIndex, out inputState);
             }
             else
             {
@@ -189,7 +189,7 @@ namespace SharpXusb
             if (device != null)
             {
                 return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle,
-                    userIndex, out inputState);
+                    device.IndexOnBus, userIndex, out inputState);
             }
             else
             {
@@ -216,7 +216,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                int result = XusbCore.Device_PowerOff(device.AssociatedBus.Handle, device.Version, userIndex);
+                int result = XusbCore.Device_PowerOff(device.AssociatedBus.Handle, device.Version, device.IndexOnBus);
                 if (result == Win32Error.DeviceNotConnected)
                 {
                     // The device is already disconnected, so in a way this function was successful

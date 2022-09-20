@@ -38,7 +38,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_GetLedState(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte deviceIndex, out XusbLedState data)
+            byte indexOnBus, out XusbLedState data)
         {
 #if !SHARPXUSB_NO_VERSION_GUARDS
             switch (version)
@@ -56,7 +56,7 @@ namespace SharpXusb
             var inBuffer = new XusbBuffer_Common()
             {
                 Version = (ushort)XusbDeviceVersion.v1_1,
-                DeviceIndex = deviceIndex
+                IndexOnBus = indexOnBus
             };
 
             fixed (XusbLedState* outBuffer = &data)
@@ -67,7 +67,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_GetInputState(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte deviceIndex, out XusbInputState data)
+            byte indexOnBus, out XusbInputState data)
         {
             data = new XusbInputState();
             switch (version)
@@ -78,7 +78,7 @@ namespace SharpXusb
                     data.Version = (ushort)XusbDeviceVersion.v1_0;
                     fixed (XusbInputState_v0* outBuffer = &data.State_v0)
                     {
-                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetInput, &deviceIndex,
+                        return Ioctl.SendReceive(busHandle, XusbIoctl.Device_GetInput, &indexOnBus,
                             sizeof(byte), outBuffer, XusbInputState_v0.Size, out _);
                     }
                 }
@@ -89,7 +89,7 @@ namespace SharpXusb
                     var inData = new XusbBuffer_Common()
                     {
                         Version = (ushort)XusbDeviceVersion.v1_1,
-                        DeviceIndex = deviceIndex
+                        IndexOnBus = indexOnBus
                     };
 
                     fixed (XusbInputState_v1* outBuffer = &data.State_v1)
@@ -103,23 +103,23 @@ namespace SharpXusb
             }
         }
 
-        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState)
+        public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState)
         {
-            return Device_SetStateCommon(busHandle, deviceIndex, ledState, XusbVibration.Zero, XusbSetStateFlags.Led);
+            return Device_SetStateCommon(busHandle, indexOnBus, ledState, XusbVibration.Zero, XusbSetStateFlags.Led);
         }
 
-        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbVibration vibration)
+        public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbVibration vibration)
         {
-            return Device_SetStateCommon(busHandle, deviceIndex, XusbLedSetting.Off, vibration, XusbSetStateFlags.Vibration);
+            return Device_SetStateCommon(busHandle, indexOnBus, XusbLedSetting.Off, vibration, XusbSetStateFlags.Vibration);
         }
 
-        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
+        public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState,
             XusbVibration vibration)
         {
-            return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration, XusbSetStateFlags.Both);
+            return Device_SetStateCommon(busHandle, indexOnBus, ledState, vibration, XusbSetStateFlags.Both);
         }
 
-        public static int Device_SetState(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
+        public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState,
             XusbVibration vibration, XusbSetStateFlags flags)
         {
             // Ignore if flags are invalid
@@ -129,15 +129,15 @@ namespace SharpXusb
                 throw new ArgumentException("Invalid flags combination provided.", nameof(flags));
             }
 
-            return Device_SetStateCommon(busHandle, deviceIndex, ledState, vibration, flags);
+            return Device_SetStateCommon(busHandle, indexOnBus, ledState, vibration, flags);
         }
 
-        private static unsafe int Device_SetStateCommon(SafeObjectHandle busHandle, byte deviceIndex, XusbLedSetting ledState,
+        private static unsafe int Device_SetStateCommon(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState,
             XusbVibration vibration, XusbSetStateFlags flags)
         {
             var inBuffer = new XusbBuffer_SetState()
             {
-                DeviceIndex = deviceIndex,
+                IndexOnBus = indexOnBus,
                 LedState = (byte)ledState,
                 Vibration = vibration,
                 Flags = (byte)flags
@@ -147,7 +147,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_GetCapabilities(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte deviceIndex, out XusbCapabilities data)
+            byte indexOnBus, out XusbCapabilities data)
         {
             data = default;
             switch (version)
@@ -164,7 +164,7 @@ namespace SharpXusb
                     var inData = new XusbBuffer_Common()
                     {
                         Version = (ushort)XusbDeviceVersion.v1_1,
-                        DeviceIndex = deviceIndex
+                        IndexOnBus = indexOnBus
                     };
 
                     fixed (XusbCapabilities_v1* outBuffer = &data.Capabilities_v1)
@@ -180,7 +180,7 @@ namespace SharpXusb
                     var inData = new XusbBuffer_Common()
                     {
                         Version = (ushort)XusbDeviceVersion.v1_2,
-                        DeviceIndex = deviceIndex
+                        IndexOnBus = indexOnBus
                     };
 
                     fixed (XusbCapabilities_v2* outBuffer = &data.Capabilities_v2)
@@ -193,7 +193,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_GetBatteryInformation(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte deviceIndex, out XusbBatteryInformation data, XusbSubDevice subDevice = XusbSubDevice.Gamepad)
+            byte indexOnBus, out XusbBatteryInformation data, XusbSubDevice subDevice = XusbSubDevice.Gamepad)
         {
             data = default;
             switch (version)
@@ -212,7 +212,7 @@ namespace SharpXusb
                     var inData = new XusbBuffer_GetBatteryInformation()
                     {
                         Version = (ushort)XusbDeviceVersion.v1_2,
-                        DeviceIndex = deviceIndex,
+                        IndexOnBus = indexOnBus,
                         SubDevice = (byte)subDevice
                     };
 
@@ -226,7 +226,7 @@ namespace SharpXusb
         }
 
         public static unsafe int Device_GetAudioDeviceInformation(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte deviceIndex, out XusbAudioDeviceInformation data)
+            byte indexOnBus, out XusbAudioDeviceInformation data)
         {
             data = default;
             switch (version)
@@ -245,7 +245,7 @@ namespace SharpXusb
                     var inData = new XusbBuffer_Common()
                     {
                         Version = (ushort)XusbDeviceVersion.v1_2,
-                        DeviceIndex = deviceIndex
+                        IndexOnBus = indexOnBus
                     };
 
                     fixed (XusbAudioDeviceInformation* outBuffer = &data)
@@ -257,38 +257,38 @@ namespace SharpXusb
             }
         }
 
-        public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, byte deviceIndex,
-            out XusbInputState inputState)
+        public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, byte indexOnBus,
+            byte userIndex, out XusbInputState inputState)
         {
             var inData = new XusbBuffer_Common()
             {
                 Version = (ushort)XusbDeviceVersion.v1_2,
-                DeviceIndex = deviceIndex
+                IndexOnBus = indexOnBus
             };
 
-            return Device_WaitCommon(busHandle_Async, deviceIndex, XusbIoctl.Device_WaitForGuide, &inData,
+            return Device_WaitCommon(busHandle_Async, indexOnBus, userIndex, XusbIoctl.Device_WaitForGuide, &inData,
                 XusbBuffer_Common.Size, out inputState);
         }
 
-        public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte deviceIndex,
+        public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte indexOnBus, byte userIndex,
             out XusbInputState inputState)
         {
             var inData = new XusbBuffer_WaitForInput()
             {
                 Version = (ushort)XusbDeviceVersion.v1_2,
-                DeviceIndex = deviceIndex,
+                IndexOnBus = indexOnBus,
                 unk = 3
             };
 
-            return Device_WaitCommon(busHandle_Async, deviceIndex, XusbIoctl.Device_WaitForInput, &inData,
+            return Device_WaitCommon(busHandle_Async, indexOnBus, userIndex, XusbIoctl.Device_WaitForInput, &inData,
                 XusbBuffer_WaitForInput.Size, out inputState);
         }
 
-        private static unsafe int Device_WaitCommon(SafeObjectHandle busHandle_Async, byte deviceIndex, int ioctl,
-            void* inBuffer, int inSize, out XusbInputState inputState)
+        private static unsafe int Device_WaitCommon(SafeObjectHandle busHandle_Async, byte indexOnBus, byte userIndex,
+            int ioctl, void* inBuffer, int inSize, out XusbInputState inputState)
         {
             inputState = default;
-            if (!CreateWaitHandle(deviceIndex))
+            if (!CreateWaitHandle(userIndex))
             {
                 // A device wait is already in progress
                 return Win32Error.OperationInProgress;
@@ -296,7 +296,7 @@ namespace SharpXusb
 
             var overlapped = new NativeOverlapped()
             {
-                EventHandle = GetWaitHandle(deviceIndex)
+                EventHandle = GetWaitHandle(userIndex)
             };
 
             int result;
@@ -326,13 +326,13 @@ namespace SharpXusb
                 }
             }
 
-            CloseWaitHandle(deviceIndex);
+            CloseWaitHandle(userIndex);
             return result;
         }
 
-        public static void Device_CancelWait(byte deviceIndex)
+        public static void Device_CancelWait(byte userIndex)
         {
-            CloseWaitHandle(deviceIndex);
+            CloseWaitHandle(userIndex);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace SharpXusb
             }
         }
 
-        public static unsafe int Device_PowerOff(SafeObjectHandle busHandle, XusbDeviceVersion version, byte deviceIndex)
+        public static unsafe int Device_PowerOff(SafeObjectHandle busHandle, XusbDeviceVersion version, byte indexOnBus)
         {
 #if !SHARPXUSB_NO_VERSION_GUARDS
             // Exclude unsupported versions
@@ -382,7 +382,7 @@ namespace SharpXusb
             var buffer = new XusbBuffer_Common()
             {
                 Version = (ushort)XusbDeviceVersion.v1_2,
-                DeviceIndex = deviceIndex
+                IndexOnBus = indexOnBus
             };
 
             return Ioctl.Send(busHandle, XusbIoctl.Device_PowerOff, &buffer, XusbBuffer_Common.Size);

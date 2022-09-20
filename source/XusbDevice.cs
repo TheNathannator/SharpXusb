@@ -46,11 +46,11 @@ namespace SharpXusb
 
         public XusbAudioDeviceInformation GetAudioDeviceInformation() => m_bus.GetDeviceAudioDeviceInformation(m_indexOnBus);
 
-        public XusbInputState WaitForGuideButton() => m_bus.WaitForDeviceGuideButton(m_indexOnBus);
-        public Task<XusbInputState> WaitForGuideButtonAsync() => m_bus.WaitForDeviceGuideButtonAsync(m_indexOnBus);
+        public XusbInputState WaitForGuideButton() => m_bus.WaitForDeviceGuideButton(m_indexOnBus, m_userIndex);
+        public Task<XusbInputState> WaitForGuideButtonAsync() => m_bus.WaitForDeviceGuideButtonAsync(m_indexOnBus, m_userIndex);
 
-        public XusbInputState WaitForInput() => m_bus.WaitForDeviceInput(m_indexOnBus);
-        public Task<XusbInputState> WaitForInputAsync() => m_bus.WaitForDeviceInputAsync(m_indexOnBus);
+        public XusbInputState WaitForInput() => m_bus.WaitForDeviceInput(m_indexOnBus, m_userIndex);
+        public Task<XusbInputState> WaitForInputAsync() => m_bus.WaitForDeviceInputAsync(m_indexOnBus, m_userIndex);
 
         public void CancelWait() => m_bus.CancelWait(m_indexOnBus);
 
