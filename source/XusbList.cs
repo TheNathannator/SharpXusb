@@ -93,13 +93,25 @@ namespace SharpXusb
                     continue;
                 }
 
+                Debug.WriteLine("Bus info:");
+                Debug.Indent();
+                Debug.WriteLine($"Version: 0x{busInfo.Version:X4}");
+                Debug.WriteLine($"Max device count: {busInfo.MaxCount}");
+                Debug.WriteLine($"Connected device count: {busInfo.DeviceCount}");
+                Debug.WriteLine($"Status: {busInfo.Status}");
+                Debug.WriteLine($"unk1: 0x{busInfo.unk1:X2}");
+                Debug.WriteLine($"unk2: 0x{busInfo.unk2:X4}");
+                Debug.WriteLine($"Vendor ID: 0x{busInfo.VendorId:X4}");
+                Debug.WriteLine($"Product ID: 0x{busInfo.ProductId:X4}");
+                Debug.Unindent();
+
                 try
                 {
                     m_busList.Add((byte)instance, bus);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Couldn't add bus to list:");
+                    Debug.WriteLine("Couldn't add bus to list:");
                     Debug.WriteLine(ex);
                     Debug.WriteLine($"Attempted to add to index {instance}.");
                     Debug.WriteLine("Current list state:");
@@ -112,30 +124,27 @@ namespace SharpXusb
 
                 if ((busInfo.Status & 0x80) != 0) // TODO: Figure out what this means, this value isn't named in OpenXInput
                 {
-                    Debug.WriteLine($"Bus has 0x80 bit set, skipping.");
+                    Debug.WriteLine("Bus has 0x80 bit set, skipping.");
                     continue;
                 }
 
-                Debug.WriteLine($"Max device count: {busInfo.MaxCount}");
-                Debug.WriteLine($"Connected device count: {busInfo.DeviceCount}");
                 for (byte indexOnBus = 0; indexOnBus < busInfo.MaxCount; indexOnBus++)
                 {
                     byte userIndex = 0xFF;
                     Debug.WriteLine($"Checking for device at index {indexOnBus}");
                     if (!bus.TryGetDeviceInputState(indexOnBus, out var inputState))
                     {
-                        Debug.WriteLine($"Couldn't get input state, skipping.");
+                        Debug.WriteLine("Couldn't get input state, skipping.");
                         continue;
                     }
-
-                    Debug.Assert(inputState.Version != (ushort)XusbDeviceVersion.ProcNotSupported, "Invalid device version detected, check for bugs!");
+                    Debug.WriteLine("Found device.");
 
                     // Attempt to use device's LED state to determine the user index
                     if (bus.TryGetDeviceLedState(indexOnBus, out var ledState))
                     {
                         if (!m_ledStateToIndex.TryGetValue(ledState.LEDState, out userIndex))
                         {
-                            Debug.WriteLine($"Could not get user index for LED state {(XusbLedSetting)ledState.LEDState} ({ledState.LEDState}).");
+                            Debug.WriteLine($"Could not get user index for LED state {(XusbLedSetting)ledState.LEDState} ({ledState.LEDState}). Will insert device into next available index.");
                             userIndex = 0xFF;
                         }
                     }
@@ -159,15 +168,55 @@ namespace SharpXusb
                         }
                     }
 
+                    var device = new XusbDevice(bus, userIndex, indexOnBus);
+
+#if DEBUG
+                    Debug.WriteLine("Device info:");
+                    Debug.Indent();
                     try
                     {
-                        var device = new XusbDevice(bus, userIndex, indexOnBus);
-                        m_deviceList.Add(userIndex, device);
+                        var capabilities = device.GetCapabilities();
+
+                        if (capabilities.Version == (ushort)XusbDeviceVersion.ProcNotSupported)
+                        {
+                            Debug.WriteLine("This device does not support capability querying.");
+                        }
+                        else if (capabilities.Version == (ushort)XusbDeviceVersion.v1_1)
+                        {
+                            var caps_v1 = capabilities.Capabilities_v1;
+                            Debug.WriteLine($"Type:     0x{caps_v1.Type:X2} ({(XusbControllerType)caps_v1.Type})");
+                            Debug.WriteLine($"SubType:  0x{caps_v1.SubType:X2} ({(XusbControllerSubType)caps_v1.SubType})");
+                        }
+                        else
+                        {
+                            var caps_v2 = capabilities.Capabilities_v2;
+                            Debug.WriteLine($"Type:       0x{caps_v2.Type:X2} ({(XusbControllerType)caps_v2.Type})");
+                            Debug.WriteLine($"SubType:    0x{caps_v2.SubType:X2} ({(XusbControllerSubType)caps_v2.SubType})");
+                            Debug.WriteLine($"Flags:      0x{caps_v2.Flags:X4} ({(XusbCapabilityFlags)caps_v2.Flags})");
+                            Debug.WriteLine($"VendorId:   0x{caps_v2.VendorId:X4}");
+                            Debug.WriteLine($"ProductId:  0x{caps_v2.ProductId:X4}");
+                            Debug.WriteLine($"Revision:   0x{caps_v2.Revision:X4}");
+                            Debug.WriteLine($"XusbId:     0x{caps_v2.XusbId:X8}");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"Couldn't add device to list:");
+                        Debug.WriteLine("Could not retrieve device capabilities.");
                         Debug.WriteLine(ex);
+                    }
+                    Debug.Unindent();
+#endif
+
+                    try
+                    {
+                        m_deviceList.Add(userIndex, device);
+                        Debug.WriteLine($"Added device as user index {userIndex}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Couldn't add device to list:");
+                        Debug.WriteLine(ex);
+                        Debug.WriteLine($"Attempted to add to index {userIndex}.");
                         Debug.WriteLine("Current list state:");
                         foreach (byte index in m_deviceList.Keys)
                         {
