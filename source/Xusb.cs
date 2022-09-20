@@ -175,9 +175,9 @@ namespace SharpXusb
             }
         }
 
-        public static async Task<(int, XusbInputState)> WaitForGuideButtonAsync(byte userIndex)
+        public static Task<(int, XusbInputState)> WaitForGuideButtonAsync(byte userIndex)
         {
-            return await Task.Run(() => {
+            return Task.Run(() => {
                 int result = WaitForGuideButton(userIndex, out var inputState);
                 return (result, inputState);
             });
@@ -198,9 +198,9 @@ namespace SharpXusb
             }
         }
 
-        public static async Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
+        public static Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
         {
-            return await Task.Run(() => {
+            return Task.Run(() => {
                 int result = WaitForInput(userIndex, out var inputState);
                 return (result, inputState);
             });

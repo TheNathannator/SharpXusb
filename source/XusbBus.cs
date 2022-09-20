@@ -171,9 +171,9 @@ namespace SharpXusb
             return inputState;
         }
 
-        public async Task<XusbInputState> WaitForDeviceGuideButtonAsync(byte indexOnBus, byte userIndex)
+        public Task<XusbInputState> WaitForDeviceGuideButtonAsync(byte indexOnBus, byte userIndex)
         {
-            return await Task.Run(() => WaitForDeviceGuideButton(indexOnBus, userIndex));
+            return Task.Run(() => WaitForDeviceGuideButton(indexOnBus, userIndex));
         }
 
         public XusbInputState WaitForDeviceInput(byte indexOnBus, byte userIndex)
@@ -183,9 +183,9 @@ namespace SharpXusb
             return inputState;
         }
 
-        public async Task<XusbInputState> WaitForDeviceInputAsync(byte indexOnBus, byte userIndex)
+        public Task<XusbInputState> WaitForDeviceInputAsync(byte indexOnBus, byte userIndex)
         {
-            return await Task.Run(() => WaitForDeviceInput(indexOnBus, userIndex));
+            return Task.Run(() => WaitForDeviceInput(indexOnBus, userIndex));
         }
 
         public void CancelWait(byte indexOnBus)
