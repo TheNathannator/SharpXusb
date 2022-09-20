@@ -18,7 +18,7 @@ namespace SharpXusb
         /// <summary>
         /// Overlapped I/O operation is in progress.
         /// </summary>
-        public const int IoPending = 997;
+        public const int IoPending = 997; // ERROR_IO_PENDING
 
         /// <summary>
         /// The device is not connected.

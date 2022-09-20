@@ -8,10 +8,16 @@ namespace SharpXusb
 {
     using static Kernel32;
 
+    /// <summary>
+    /// Core XUSB interface functionality.
+    /// </summary>
     internal static class XusbCore
     {
         private static readonly Dictionary<byte, EventWaitHandle> m_waitHandles = new Dictionary<byte, EventWaitHandle>(4);
 
+        /// <summary>
+        /// Gets information about a bus.
+        /// </summary>
         public static unsafe int Bus_GetInformation(SafeObjectHandle busHandle, out XusbBusInfo data)
         {
             fixed (XusbBusInfo* outBuffer = &data)
@@ -20,6 +26,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets extended information about a bus.
+        /// </summary>
         public static unsafe int Bus_GetInformationEx(SafeObjectHandle busHandle, XusbDeviceVersion version,
             XusbBusInformationExType type, out XusbBusInfoEx data
         )
@@ -37,6 +46,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets the LED state of a device.
+        /// </summary>
         public static unsafe int Device_GetLedState(SafeObjectHandle busHandle, XusbDeviceVersion version,
             byte indexOnBus, out XusbLedState data)
         {
@@ -66,6 +78,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets the input state of a device.
+        /// </summary>
         public static unsafe int Device_GetInputState(SafeObjectHandle busHandle, XusbDeviceVersion version,
             byte indexOnBus, out XusbInputState data)
         {
@@ -103,22 +118,34 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Sets the LED state of a device.
+        /// </summary>
         public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState)
         {
             return Device_SetStateCommon(busHandle, indexOnBus, ledState, XusbVibration.Zero, XusbSetStateFlags.Led);
         }
 
+        /// <summary>
+        /// Sets the vibration state of a device.
+        /// </summary>
         public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbVibration vibration)
         {
             return Device_SetStateCommon(busHandle, indexOnBus, XusbLedSetting.Off, vibration, XusbSetStateFlags.Vibration);
         }
 
+        /// <summary>
+        /// Sets the LED state and vibration state of a device.
+        /// </summary>
         public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState,
             XusbVibration vibration)
         {
             return Device_SetStateCommon(busHandle, indexOnBus, ledState, vibration, XusbSetStateFlags.Both);
         }
 
+        /// <summary>
+        /// Sets the LED state and/or vibration state of a device.
+        /// </summary>
         public static int Device_SetState(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState,
             XusbVibration vibration, XusbSetStateFlags flags)
         {
@@ -132,6 +159,9 @@ namespace SharpXusb
             return Device_SetStateCommon(busHandle, indexOnBus, ledState, vibration, flags);
         }
 
+        /// <summary>
+        /// Common method for setting a device's state.
+        /// </summary>
         private static unsafe int Device_SetStateCommon(SafeObjectHandle busHandle, byte indexOnBus, XusbLedSetting ledState,
             XusbVibration vibration, XusbSetStateFlags flags)
         {
@@ -146,6 +176,9 @@ namespace SharpXusb
             return Ioctl.Send(busHandle, XusbIoctl.Device_SetState, &inBuffer, XusbBuffer_SetState.Size);
         }
 
+        /// <summary>
+        /// Gets the capabilities of a device.
+        /// </summary>
         public static unsafe int Device_GetCapabilities(SafeObjectHandle busHandle, XusbDeviceVersion version,
             byte indexOnBus, out XusbCapabilities data)
         {
@@ -192,6 +225,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets the battery information of a device.
+        /// </summary>
         public static unsafe int Device_GetBatteryInformation(SafeObjectHandle busHandle, XusbDeviceVersion version,
             byte indexOnBus, out XusbBatteryInformation data, XusbSubDevice subDevice = XusbSubDevice.Gamepad)
         {
@@ -225,6 +261,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets the audio device information of a device.
+        /// </summary>
         public static unsafe int Device_GetAudioDeviceInformation(SafeObjectHandle busHandle, XusbDeviceVersion version,
             byte indexOnBus, out XusbAudioDeviceInformation data)
         {
@@ -257,6 +296,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Waits for an input state where the guide button is active.
+        /// </summary>
         public static unsafe int Device_WaitForGuideButton(SafeObjectHandle busHandle_Async, byte indexOnBus,
             byte userIndex, out XusbInputState inputState)
         {
@@ -270,6 +312,9 @@ namespace SharpXusb
                 XusbBuffer_Common.Size, out inputState);
         }
 
+        /// <summary>
+        /// Waits for a new input state.
+        /// </summary>
         // TODO: This doesn't seem to work properly
         public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte indexOnBus, byte userIndex,
             out XusbInputState inputState)
@@ -285,6 +330,9 @@ namespace SharpXusb
                 XusbBuffer_WaitForInput.Size, out inputState);
         }
 
+        /// <summary>
+        /// Common method for device input waits.
+        /// </summary>
         private static unsafe int Device_WaitCommon(SafeObjectHandle busHandle_Async, byte indexOnBus, byte userIndex,
             int ioctl, void* inBuffer, int inSize, out XusbInputState inputState)
         {
@@ -331,6 +379,9 @@ namespace SharpXusb
             return result;
         }
 
+        /// <summary>
+        /// Cancels a device input wait.
+        /// </summary>
         public static void Device_CancelWait(byte userIndex)
         {
             CloseWaitHandle(userIndex);
@@ -367,6 +418,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Powers off a device.
+        /// </summary>
         public static unsafe int Device_PowerOff(SafeObjectHandle busHandle, XusbDeviceVersion version, byte indexOnBus)
         {
 #if !SHARPXUSB_NO_VERSION_GUARDS

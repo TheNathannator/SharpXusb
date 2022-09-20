@@ -9,6 +9,9 @@ namespace SharpXusb
 
     internal static class Utilities
     {
+        /// <summary>
+        /// Creates a file handle with the given path and, optionally, file creation flags.
+        /// </summary>
         public static SafeObjectHandle CreateFile(string path, CreateFileFlags flags = CreateFileFlags.FILE_ATTRIBUTE_NORMAL)
         {
             var handle = Kernel32.CreateFile(
@@ -29,6 +32,9 @@ namespace SharpXusb
             return handle;
         }
 
+        /// <summary>
+        /// Throws an exception on a failure result.
+        /// </summary>
         public static void ThrowOnError(int result)
         {
             if (result != Win32Error.Success)
@@ -37,6 +43,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Throws an exception on a failure result.
+        /// </summary>
         public static void ThrowOnError(bool result)
         {
             if (!result)
