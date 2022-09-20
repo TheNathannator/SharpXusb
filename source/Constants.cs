@@ -136,7 +136,7 @@ namespace SharpXusb
         /// <summary>
         /// A gamepad-compatible input device.
         /// </summary>
-        Gamepad = 0x01
+        Gamepad = 1
     }
 
     /// <summary>
@@ -147,47 +147,47 @@ namespace SharpXusb
         /// <summary>
         /// Subtype is unknown.
         /// </summary>
-        Unknown = 0x00,
+        Unknown = 0,
         /// <summary>
         /// A standard gamepad.
         /// </summary>
-        Gamepad = 0x01,
+        Gamepad = 1,
         /// <summary>
         /// A steering wheel.
         /// </summary>
-        Wheel = 0x02,
+        Wheel = 2,
         /// <summary>
         /// An arcade stick.
         /// </summary>
-        ArcadeStick = 0x03,
+        ArcadeStick = 3,
         /// <summary>
         /// A flight stick.
         /// </summary>
-        FlightStick = 0x04,
+        FlightStick = 4,
         /// <summary>
         /// A dance pad.
         /// </summary>
-        DancePad = 0x05,
+        DancePad = 5,
         /// <summary>
         /// A guitar peripheral.
         /// </summary>
-        Guitar = 0x06,
+        Guitar = 6,
         /// <summary>
         /// A guitar peripheral with more motion capabilities.
         /// </summary>
-        GuitarAlternate = 0x07,
+        GuitarAlternate = 7,
         /// <summary>
         /// A drumkit peripheral.
         /// </summary>
-        DrumKit = 0x08,
+        DrumKit = 8,
         /// <summary>
         /// A bass guitar peripheral.
         /// </summary>
-        GuitarBass = 0x0B,
+        GuitarBass = 11,
         /// <summary>
         /// An arcade pad.
         /// </summary>
-        ArcadePad = 0x13
+        ArcadePad = 19,
     }
 
     /// <summary>
@@ -230,19 +230,19 @@ namespace SharpXusb
         /// <summary>
         /// Device is not connected.
         /// </summary>
-        Disconnected = 0x00,
+        Disconnected = 0,
         /// <summary>
         /// Device is wired and does not have a battery.
         /// </summary>
-        Wired = 0x01,
+        Wired = 1,
         /// <summary>
         /// Device has an alkaline battery.
         /// </summary>
-        Alkaline = 0x02,
+        Alkaline = 2,
         /// <summary>
         /// Device has a nickel metal hydride battery.
         /// </summary>
-        NiMH = 0x03,
+        NiMH = 3,
         /// <summary>
         /// Battery type is unknown.
         /// </summary>
@@ -257,19 +257,19 @@ namespace SharpXusb
         /// <summary>
         /// Battery level is empty.
         /// </summary>
-        Empty = 0x00,
+        Empty = 0,
         /// <summary>
         /// Battery level is low.
         /// </summary>
-        Low = 0x01,
+        Low = 1,
         /// <summary>
         /// Battery level is medium.
         /// </summary>
-        Medium = 0x02,
+        Medium = 2,
         /// <summary>
         /// Battery level is full.
         /// </summary>
-        Full = 0x03
+        Full = 3
     }
 
     /// <summary>
@@ -300,11 +300,11 @@ namespace SharpXusb
         /// <summary>
         /// Set the LED's state.
         /// </summary>
-        Led = 1,
+        Led = 0x01,
         /// <summary>
         /// Set the vibration motors' states.
         /// </summary>
-        Vibration = 2,
+        Vibration = 0x02,
 
         /// <summary>
         /// Set the state of both the LED and the vibration motors.
