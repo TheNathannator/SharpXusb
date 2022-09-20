@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using PInvoke;
@@ -18,11 +19,7 @@ namespace SharpXusb
         {
             get
             {
-                if (m_version == XusbDeviceVersion.ProcNotSupported)
-                {
-                    m_version = (XusbDeviceVersion)GetInformation().Version;
-                }
-
+                Debug.Assert(m_version != XusbDeviceVersion.ProcNotSupported);
                 return m_version;
             }
         }
@@ -61,11 +58,7 @@ namespace SharpXusb
             m_handle = Utilities.CreateFile(path);
             m_handleAsync = Utilities.CreateFile(path, CreateFileFlags.FILE_ATTRIBUTE_NORMAL | CreateFileFlags.FILE_FLAG_OVERLAPPED);
             m_version = (XusbDeviceVersion)GetInformation().Version;
-            if (m_version == XusbDeviceVersion.ProcNotSupported)
-            {
-                // Try again
-                m_version = (XusbDeviceVersion)GetInformation().Version;
-            }
+            Debug.Assert(m_version != XusbDeviceVersion.ProcNotSupported);
         }
 
         ~XusbBus()
@@ -77,19 +70,13 @@ namespace SharpXusb
         {
             int result = XusbCore.Bus_GetInformation(Handle, out var info);
             Utilities.ThrowOnError(result);
-            m_version = (XusbDeviceVersion)info.Version;
             return info;
         }
 
         public bool TryGetInformation(out XusbBusInfo info)
         {
             int result = XusbCore.Bus_GetInformation(Handle, out info);
-            bool success = result == 0;
-            if (success)
-            {
-                m_version = (XusbDeviceVersion)info.Version;
-            }
-            return success;
+            return result == 0;
         }
 
         public XusbBusInfoEx GetInformationEx(XusbBusInformationExType type = XusbBusInformationExType.Basic)
