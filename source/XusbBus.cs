@@ -58,21 +58,21 @@ namespace SharpXusb
 
         public XusbBusInfoEx GetInformationEx(XusbBusInformationExType type = XusbBusInformationExType.Basic)
         {
-           int result = XusbCore.Bus_GetInformationEx(m_handle, Version, type, out var info);
+           int result = XusbCore.Bus_GetInformationEx(m_handle, m_version, type, out var info);
             Utilities.ThrowOnError(result);
             return info;
         }
 
         public XusbInputState GetDeviceInputState(byte indexOnBus)
         {
-            int result = XusbCore.Device_GetInputState(m_handle, Version, indexOnBus, out var state);
+            int result = XusbCore.Device_GetInputState(m_handle, m_version, indexOnBus, out var state);
             Utilities.ThrowOnError(result);
             return state;
         }
 
         public bool TryGetDeviceInputState(byte indexOnBus, out XusbInputState state)
         {
-            int result = XusbCore.Device_GetInputState(m_handle, Version, indexOnBus, out state);
+            int result = XusbCore.Device_GetInputState(m_handle, m_version, indexOnBus, out state);
             return result == 0;
         }
 
@@ -102,34 +102,34 @@ namespace SharpXusb
 
         public bool TryGetDeviceLedState(byte indexOnBus, out XusbLedState ledState)
         {
-            int result = XusbCore.Device_GetLedState(m_handle, Version, indexOnBus, out ledState);
+            int result = XusbCore.Device_GetLedState(m_handle, m_version, indexOnBus, out ledState);
             return result == 0;
         }
 
         public XusbLedState GetDeviceLedState(byte indexOnBus)
         {
-            int result = XusbCore.Device_GetLedState(m_handle, Version, indexOnBus, out var ledState);
+            int result = XusbCore.Device_GetLedState(m_handle, m_version, indexOnBus, out var ledState);
             Utilities.ThrowOnError(result);
             return ledState;
         }
 
         public XusbCapabilities GetDeviceCapabilities(byte indexOnBus)
         {
-            int result = XusbCore.Device_GetCapabilities(m_handle, Version, indexOnBus, out var capabilities);
+            int result = XusbCore.Device_GetCapabilities(m_handle, m_version, indexOnBus, out var capabilities);
             Utilities.ThrowOnError(result);
             return capabilities;
         }
 
         public XusbBatteryInformation GetDeviceBatteryInformation(byte indexOnBus, XusbSubDevice subDevice = XusbSubDevice.Gamepad)
         {
-            int result = XusbCore.Device_GetBatteryInformation(m_handle, Version, indexOnBus, out var batteryInfo, subDevice);
+            int result = XusbCore.Device_GetBatteryInformation(m_handle, m_version, indexOnBus, out var batteryInfo, subDevice);
             Utilities.ThrowOnError(result);
             return batteryInfo;
         }
 
         public XusbAudioDeviceInformation GetDeviceAudioDeviceInformation(byte indexOnBus)
         {
-            int result = XusbCore.Device_GetAudioDeviceInformation(m_handle, Version, indexOnBus, out var audioInfo);
+            int result = XusbCore.Device_GetAudioDeviceInformation(m_handle, m_version, indexOnBus, out var audioInfo);
             Utilities.ThrowOnError(result);
             return audioInfo;
         }
@@ -172,7 +172,7 @@ namespace SharpXusb
 
         public void PowerOffDevice(byte indexOnBus)
         {
-            int result = XusbCore.Device_PowerOff(Handle, Version, indexOnBus);
+            int result = XusbCore.Device_PowerOff(Handle, m_version, indexOnBus);
             if (result != Win32Error.DeviceNotConnected)
             {
                 Utilities.ThrowOnError(result);
