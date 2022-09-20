@@ -160,7 +160,7 @@ namespace SharpXusb
         public string GetDeviceAudioDeviceString(byte userIndex)
         {
             var audioInfo = GetDeviceAudioDeviceInformation(userIndex);
-            return $"USB\\VID_{audioInfo.VendorId}&PID_{audioInfo.ProductId}&IA_{audioInfo.unk}";
+            return $"USB\\VID_{audioInfo.VendorId:X4}&PID_{audioInfo.ProductId:X4}&IA_{audioInfo.unk:X2}";
         }
 
         public XusbInputState WaitForDeviceGuideButton(byte userIndex)
