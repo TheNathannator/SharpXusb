@@ -26,8 +26,11 @@ namespace SharpXusb
         {
             get
             {
-                _Refresh();
-                return m_deviceList;
+                lock (m_listLock)
+                {
+                    _Refresh();
+                    return m_deviceList;
+                }
             }
         }
 
@@ -35,8 +38,11 @@ namespace SharpXusb
         {
             get
             {
-                _Refresh();
-                return m_busList;
+                lock (m_listLock)
+                {
+                    _Refresh();
+                    return m_busList;
+                }
             }
         }
 
