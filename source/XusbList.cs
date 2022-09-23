@@ -22,7 +22,7 @@ namespace SharpXusb
             {(byte)XusbLedSetting.Player4, 3}
         };
 
-        public static SortedDictionary<byte, XusbDevice> DeviceList
+        public static IReadOnlyDictionary<byte, XusbDevice> DeviceList
         {
             get
             {
@@ -34,7 +34,7 @@ namespace SharpXusb
             }
         }
 
-        public static SortedDictionary<byte, XusbBus> BusList
+        public static IReadOnlyDictionary<byte, XusbBus> BusList
         {
             get
             {
