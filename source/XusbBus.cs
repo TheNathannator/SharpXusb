@@ -174,10 +174,7 @@ namespace SharpXusb
         public void PowerOffDevice(byte indexOnBus)
         {
             int result = XusbCore.Device_PowerOff(Handle, m_version, indexOnBus);
-            if (result != Win32Error.DeviceNotConnected)
-            {
-                Utilities.ThrowOnError(result);
-            }
+            Utilities.ThrowOnError(result);
         }
 
         public void Dispose()

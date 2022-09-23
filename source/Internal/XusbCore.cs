@@ -440,7 +440,14 @@ namespace SharpXusb
                 IndexOnBus = indexOnBus
             };
 
-            return Ioctl.Send(busHandle, XusbIoctl.Device_PowerOff, &buffer, XusbBuffer_Common.Size);
+            int result = Ioctl.Send(busHandle, XusbIoctl.Device_PowerOff, &buffer, XusbBuffer_Common.Size);
+            // Explicitly ignore DeviceNotConnected, this is already what's desired
+            if (result == Win32Error.DeviceNotConnected)
+            {
+                result = Win32Error.Success;
+            }
+
+            return result;
         }
     }
 }

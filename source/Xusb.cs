@@ -217,16 +217,7 @@ namespace SharpXusb
             var device = XusbList.GetDevice(userIndex);
             if (device != null)
             {
-                int result = XusbCore.Device_PowerOff(device.AssociatedBus.Handle, device.Version, device.IndexOnBus);
-                if (result == Win32Error.DeviceNotConnected)
-                {
-                    // The device is already disconnected, so in a way this function was successful
-                    return Win32Error.Success;
-                }
-                else
-                {
-                    return result;
-                }
+                return XusbCore.Device_PowerOff(device.AssociatedBus.Handle, device.Version, device.IndexOnBus);
             }
             else
             {
