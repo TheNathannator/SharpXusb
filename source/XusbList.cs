@@ -7,8 +7,9 @@ namespace SharpXusb
 {
     public static class XusbList
     {
-        private static readonly object m_listLock = new object();
+        private static readonly object m_devListLock = new object();
         private static readonly SortedDictionary<byte, XusbDevice> m_deviceList = new SortedDictionary<byte, XusbDevice>();
+        private static readonly object m_busListLock = new object();
         private static readonly SortedDictionary<byte, XusbBus> m_busList = new SortedDictionary<byte, XusbBus>();
         private static readonly Dictionary<byte, byte> m_ledStateToIndex = new Dictionary<byte, byte>()
         {
@@ -26,7 +27,7 @@ namespace SharpXusb
         {
             get
             {
-                lock (m_listLock)
+                lock (m_devListLock)
                 {
                     _Refresh();
                     return m_deviceList;
@@ -38,7 +39,7 @@ namespace SharpXusb
         {
             get
             {
-                lock (m_listLock)
+                lock (m_busListLock)
                 {
                     _Refresh();
                     return m_busList;
@@ -48,17 +49,17 @@ namespace SharpXusb
 
         public static XusbDevice GetDevice(byte userIndex)
         {
-            return ListHelper(m_deviceList, userIndex);
+            return ListHelper(m_deviceList, m_devListLock, userIndex);
         }
 
         public static XusbBus GetBus(byte busIndex)
         {
-            return ListHelper(m_busList, busIndex);
+            return ListHelper(m_busList, m_busListLock, busIndex);
         }
 
-        private static T ListHelper<T>(SortedDictionary<byte, T> list, byte index) where T : class
+        private static T ListHelper<T>(SortedDictionary<byte, T> list, object listLock, byte index) where T : class
         {
-            lock (m_listLock)
+            lock (listLock)
             {
                 if (list.TryGetValue(index, out var item))
                 {
@@ -82,7 +83,8 @@ namespace SharpXusb
 
         public static void Refresh()
         {
-            lock (m_listLock)
+            lock (m_devListLock)
+            lock (m_busListLock)
             {
                 _Refresh();
             }
