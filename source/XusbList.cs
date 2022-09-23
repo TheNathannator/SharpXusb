@@ -26,7 +26,7 @@ namespace SharpXusb
         {
             get
             {
-                Refresh();
+                _Refresh();
                 return m_deviceList;
             }
         }
@@ -35,7 +35,7 @@ namespace SharpXusb
         {
             get
             {
-                Refresh();
+                _Refresh();
                 return m_busList;
             }
         }
@@ -61,7 +61,7 @@ namespace SharpXusb
                 else
                 {
                     // Refresh list and try again
-                    Refresh();
+                    _Refresh();
                     if (list.TryGetValue(index, out item))
                     {
                         return item;
@@ -74,7 +74,15 @@ namespace SharpXusb
             }
         }
 
-        private static void Refresh()
+        public static void Refresh()
+        {
+            lock (m_listLock)
+            {
+                _Refresh();
+            }
+        }
+
+        private static void _Refresh()
         {
             m_busList.Clear();
             m_deviceList.Clear();
