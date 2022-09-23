@@ -93,7 +93,18 @@ namespace SharpXusb
             )
             {
                 Debug.WriteLine($"Found bus: {path}");
-                var bus = new XusbBus(path);
+                XusbBus bus;
+                try
+                {
+                    bus = new XusbBus(path);
+                    Debug.WriteLine("Created XusbBus for bus.");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Couldn't create XusbBus for bus:");
+                    Debug.WriteLine(ex);
+                    continue;
+                }
 
                 if (!bus.TryGetInformation(out var busInfo))
                 {
@@ -176,7 +187,18 @@ namespace SharpXusb
                         }
                     }
 
-                    var device = new XusbDevice(bus, userIndex, indexOnBus);
+                    XusbDevice device;
+                    try
+                    {
+                        device = new XusbDevice(bus, userIndex, indexOnBus);
+                        Debug.WriteLine("Created XusbDevice for device.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Couldn't create XusbDevice for device:");
+                        Debug.WriteLine(ex);
+                        continue;
+                    }
 
 #if DEBUG
                     Debug.WriteLine("Device info:");
