@@ -447,6 +447,9 @@ namespace SharpXusb
                 result = Win32Error.Success;
             }
 
+            // Refresh device list to ensure it stays up-to-date
+            XusbList.Refresh();
+
             return result;
         }
     }
