@@ -34,8 +34,7 @@ namespace SharpXusb
 
         public XusbCapabilities GetCapabilities() => m_bus.GetDeviceCapabilities(m_indexOnBus);
 
-        public XusbBatteryInformation GetBatteryInformation() => m_bus.GetDeviceBatteryInformation(m_indexOnBus);
-        public XusbBatteryInformation GetBatteryInformation(XusbSubDevice subDevice) => m_bus.GetDeviceBatteryInformation(m_indexOnBus, subDevice);
+        public XusbBatteryInformation GetBatteryInformation(XusbSubDevice subDevice = XusbSubDevice.Gamepad) => m_bus.GetDeviceBatteryInformation(m_indexOnBus, subDevice);
 
         public XusbAudioDeviceInformation GetAudioDeviceInformation() => m_bus.GetDeviceAudioDeviceInformation(m_indexOnBus);
 
