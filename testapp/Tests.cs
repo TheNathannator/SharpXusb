@@ -32,7 +32,7 @@ namespace SharpXusbTestApp
             // (Device_WaitForInput,              "Wait For Input")
         };
 
-        private static T SelectDevice<T>(SortedDictionary<byte, T> list, string deviceType) where T : class
+        private static T SelectDevice<T>(IReadOnlyDictionary<byte, T> list, string deviceType) where T : class
         {
             while (true)
             {
