@@ -271,7 +271,10 @@ namespace SharpXusbTestApp
                     Console.WriteLine(ledState);
                 }
 
-                device.SetState(ledState, vibration, flags);
+                if (flags != 0)
+                {
+                    device.SetState(ledState, vibration, flags);
+                }
 
                 Console.WriteLine();
                 var key = Utilities.WaitForKey("Press Enter to go back to the previous menu, or press any other key to repeat this test.");
