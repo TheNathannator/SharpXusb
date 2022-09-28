@@ -229,7 +229,7 @@ namespace SharpXusb
         /// Gets the battery information of a device.
         /// </summary>
         public static unsafe int Device_GetBatteryInformation(SafeObjectHandle busHandle, XusbDeviceVersion version,
-            byte indexOnBus, out XusbBatteryInformation data, XusbSubDevice subDevice = XusbSubDevice.Gamepad)
+            byte indexOnBus, out XusbBatteryInformation data, XusbSubDevice subDevice)
         {
             data = default;
             switch (version)
