@@ -5,6 +5,9 @@ using Nefarius.Utilities.DeviceManagement.PnP;
 
 namespace SharpXusb
 {
+    /// <summary>
+    /// A singleton list of XUSB buses and devices.
+    /// </summary>
     public static class XusbList
     {
         private static readonly object m_devListLock = new object();
@@ -23,6 +26,9 @@ namespace SharpXusb
             {(byte)XusbLedSetting.Player4, 3}
         };
 
+        /// <summary>
+        /// Gets the list of XUSB devices.
+        /// </summary>
         public static IReadOnlyDictionary<byte, XusbDevice> DeviceList
         {
             get
@@ -35,6 +41,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets the list of XUSB buses.
+        /// </summary>
         public static IReadOnlyDictionary<byte, XusbBus> BusList
         {
             get
@@ -47,11 +56,23 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Gets the device with the specified user index. 
+        /// </summary>
+        /// <param name="userIndex">
+        /// The index of the device to get.
+        /// </param>
         public static XusbDevice GetDevice(byte userIndex)
         {
             return ListHelper(m_deviceList, m_devListLock, userIndex);
         }
 
+        /// <summary>
+        /// Gets the bus with the specified instance index.
+        /// </summary>
+        /// <param name="userIndex">
+        /// The index of the bus to get.
+        /// </param>
         public static XusbBus GetBus(byte busIndex)
         {
             return ListHelper(m_busList, m_busListLock, busIndex);
@@ -81,6 +102,9 @@ namespace SharpXusb
             }
         }
 
+        /// <summary>
+        /// Refreshes the bus and device lists.
+        /// </summary>
         public static void Refresh()
         {
             lock (m_devListLock)
