@@ -198,6 +198,11 @@ namespace SharpXusb
                             Debug.WriteLine($"Could not get user index for LED state {(XusbLedSetting)ledState.LEDState} ({ledState.LEDState}). Will insert device into next available index.");
                             userIndex = 0xFF;
                         }
+                        else if (m_deviceList.ContainsKey(userIndex))
+                        {
+                            Debug.WriteLine($"Got user index for LED state {(XusbLedSetting)ledState.LEDState} ({ledState.LEDState}), but that index is already taken. Will insert device into next available index.");
+                            userIndex = 0xFF;
+                        }
                     }
 
                     // If user index couldn't be determined, use next-available user index
