@@ -119,8 +119,12 @@ namespace SharpXusb
         [FieldOffset(2)]
         public byte IndexOnBus;
 
+        /// <summary>
+        /// Whether or not a dummy state should be returned.
+        /// 3 will return the actual state, any other value will return a dummy state.
+        /// </summary>
         [FieldOffset(3)]
-        public byte unk;
+        public byte DummyState;
 
         /// <summary>
         /// Size of this structure in bytes.

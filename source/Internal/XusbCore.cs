@@ -326,7 +326,7 @@ namespace SharpXusb
             {
                 Version = (ushort)XusbDeviceVersion.v1_2,
                 IndexOnBus = indexOnBus,
-                unk = 3
+                DummyState = 3
             };
 
             return Device_WaitCommon(busHandle_Async, indexOnBus, userIndex, XusbIoctl.Device_WaitForInput, &inData,
