@@ -338,7 +338,7 @@ namespace SharpXusbTestApp
             var timer = new Stopwatch();
             int cursorPosition = Console.CursorTop;
             string currentTimeString;
-            string finalTimeString;
+            string finalTimeString = "";
             XusbInputState waitState = default;
             bool exit = false;
             while (true)
@@ -370,9 +370,8 @@ namespace SharpXusbTestApp
                 }
                 timer.Stop();
 
-                // Clear current time
-                Console.SetCursorPosition(0, cursorPosition);
-                Console.WriteLine(new string(' ', currentTimeString.Length));
+                // Clear final time
+                Console.WriteLine(new string(' ', finalTimeString.Length));
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
 
                 finalTimeString = $"Waited for {timer.ElapsedMilliseconds} ms";
@@ -387,9 +386,9 @@ namespace SharpXusbTestApp
                     return;
                 }
 
-                // Clear final time
+                // Clear current time
                 Console.SetCursorPosition(0, cursorPosition);
-                Console.WriteLine(new string(' ', finalTimeString.Length));
+                Console.WriteLine(new string(' ', currentTimeString.Length));
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
             }
         }
