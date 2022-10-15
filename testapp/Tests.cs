@@ -29,7 +29,7 @@ namespace SharpXusbTestApp
             (Device_GetAudioDeviceInformation, "Get Audio Device Info"),
             (Device_PowerOff,                  "Power Off"),
             (Device_WaitForGuide,              "Wait For Guide Button"),
-            // (Device_WaitForInput,              "Wait For Input")
+            (Device_WaitForInput,              "Wait For Input")
         };
 
         private static T SelectDevice<T>(IReadOnlyDictionary<byte, T> list, string deviceType) where T : class
@@ -322,12 +322,14 @@ namespace SharpXusbTestApp
             Device_WaitCommon(device, (dev) => dev.WaitForGuideButtonAsync());
         }
 
-        // public unsafe static void Device_WaitForInput(XusbDevice device)
-        // {
-        //     Utilities.CycleMenu("XUSB Device - Wait for Input");
+        public unsafe static void Device_WaitForInput(XusbDevice device)
+        {
+            Utilities.CycleMenu("XUSB Device - Wait for Input");
 
-        //     Device_WaitCommon(device, (dev) => dev.WaitForInputAsync());
-        // }
+            Console.WriteLine("This test does not currently work. Waiting for input requires a focused native window, a limitation which is imposed by the driver.");
+            Utilities.WaitForKey("Press any key to return to the previous menu.");
+            // Device_WaitCommon(device, (dev) => dev.WaitForInputAsync());
+        }
 
         private static void Device_WaitCommon(XusbDevice device, Func<XusbDevice, Task<XusbInputState>> func)
         {

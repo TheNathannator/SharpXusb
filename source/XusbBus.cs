@@ -216,24 +216,31 @@ namespace SharpXusb
             return Task.Run(() => WaitForDeviceGuideButton(indexOnBus, userIndex));
         }
 
-        // TODO
-        // /// <summary>
-        // /// Waits for an input state from a device on this bus.
-        // /// </summary>
-        // public XusbInputState WaitForDeviceInput(byte indexOnBus, byte userIndex)
-        // {
-        //     int result = XusbCore.Device_WaitForInput(m_handleAsync, indexOnBus, userIndex, out var inputState);
-        //     Utilities.ThrowOnError(result);
-        //     return inputState;
-        // }
+        /// <summary>
+        /// Waits for an input state from a device on this bus.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This requires an active non-console window in order to work.
+        /// This is a limitation imposed by the driver itself.
+        /// </remarks>
+        public XusbInputState WaitForDeviceInput(byte indexOnBus, byte userIndex)
+        {
+            int result = XusbCore.Device_WaitForInput(m_handle, indexOnBus, userIndex, out var inputState);
+            Utilities.ThrowOnError(result);
+            return inputState;
+        }
 
-        // /// <summary>
-        // /// Waits asynchronously for an input state from a device on this bus.
-        // /// </summary>
-        // public Task<XusbInputState> WaitForDeviceInputAsync(byte indexOnBus, byte userIndex)
-        // {
-        //     return Task.Run(() => WaitForDeviceInput(indexOnBus, userIndex));
-        // }
+        /// <summary>
+        /// Waits asynchronously for an input state from a device on this bus.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This requires an active non-console window in order to work.
+        /// This is a limitation imposed by the driver itself.
+        /// </remarks>
+        public Task<XusbInputState> WaitForDeviceInputAsync(byte indexOnBus, byte userIndex)
+        {
+            return Task.Run(() => WaitForDeviceInput(indexOnBus, userIndex));
+        }
 
         /// <summary>
         /// Cancels the input wait of a device on this bus.

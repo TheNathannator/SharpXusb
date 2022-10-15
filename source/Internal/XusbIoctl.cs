@@ -48,7 +48,8 @@ namespace SharpXusb
         /// Waits for input from a device.
         /// </summary>
         /// <remarks>
-        /// TODO: Does not seem to work currently, further investigation required.
+        /// NOTE: This requires an active non-console window in order to work.
+        /// This is a limitation imposed by the driver itself.
         /// </remarks>
         public static readonly int Device_WaitForInput              = Ioctl.Create(FILE_DEVICE_XUSB, FUNCTION_FLAG_CUSTOM | 0x0EB, METHOD_BUFFERED, ACCESS_READ | ACCESS_WRITE);
         /// <summary>

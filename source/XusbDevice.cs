@@ -97,16 +97,15 @@ namespace SharpXusb
         /// </summary>
         public Task<XusbInputState> WaitForGuideButtonAsync() => m_bus.WaitForDeviceGuideButtonAsync(m_indexOnBus, m_userIndex);
 
-        // TODO
-        // /// <summary>
-        // /// Waits for an input state from this device where the guide button is pressed.
-        // /// </summary>
-        // public XusbInputState WaitForInput() => m_bus.WaitForDeviceInput(m_indexOnBus, m_userIndex);
+        /// <summary>
+        /// Waits for an input state from this device where the guide button is pressed.
+        /// </summary>
+        public XusbInputState WaitForInput() => m_bus.WaitForDeviceInput(m_indexOnBus, m_userIndex);
 
-        // /// <summary>
-        // /// Waits asynchronously for an input state from this device where the guide button is pressed.
-        // /// </summary>
-        // public Task<XusbInputState> WaitForInputAsync() => m_bus.WaitForDeviceInputAsync(m_indexOnBus, m_userIndex);
+        /// <summary>
+        /// Waits asynchronously for an input state from this device where the guide button is pressed.
+        /// </summary>
+        public Task<XusbInputState> WaitForInputAsync() => m_bus.WaitForDeviceInputAsync(m_indexOnBus, m_userIndex);
 
         /// <summary>
         /// Cancels an input wait for this device.

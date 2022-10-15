@@ -319,51 +319,54 @@ namespace SharpXusb
             });
         }
 
-        // TODO
-        // /// <inheritdoc cref="XusbCore.Device_WaitForInput(PInvoke.Kernel32.SafeObjectHandle, byte, byte, out XusbInputState)"/>
-        // /// <param name="userIndex">
-        // /// The index of the device to query.
-        // /// </param>
-        // /// <param name="inputState">
-        // /// The input state that ended the wait.
-        // /// </param>
-        // /// <returns>
-        // /// <see cref="Win32Error.Success"/> if successful, <see cref="Win32Error.DeviceNotConnected"/> if device
-        // /// isn't present, <see cref="Win32Error.OperationInProgress"/> if a wait operation is already taking place,
-        // /// <see cref="Win32Error.Cancelled"/> if the wait was cancelled. Other codes may be returned by the system.
-        // /// </returns>
-        // public static int WaitForInput(byte userIndex, out XusbInputState inputState)
-        // {
-        //     var device = XusbList.GetDevice(userIndex);
-        //     if (device != null)
-        //     {
-        //         return XusbCore.Device_WaitForInput(device.AssociatedBus.AsyncHandle,
-        //             device.IndexOnBus, userIndex, out inputState);
-        //     }
-        //     else
-        //     {
-        //         inputState = default;
-        //         return Win32Error.DeviceNotConnected;
-        //     }
-        // }
+        /// <inheritdoc cref="XusbCore.Device_WaitForInput(PInvoke.Kernel32.SafeObjectHandle, byte, byte, out XusbInputState)"/>
+        /// <param name="userIndex">
+        /// The index of the device to query.
+        /// </param>
+        /// <param name="inputState">
+        /// The input state that ended the wait.
+        /// </param>
+        /// <returns>
+        /// <see cref="Win32Error.Success"/> if successful, <see cref="Win32Error.DeviceNotConnected"/> if device
+        /// isn't present, <see cref="Win32Error.OperationInProgress"/> if a wait operation is already taking place,
+        /// <see cref="Win32Error.Cancelled"/> if the wait was cancelled. Other codes may be returned by the system.
+        /// </returns>
+        public static int WaitForInput(byte userIndex, out XusbInputState inputState)
+        {
+            var device = XusbList.GetDevice(userIndex);
+            if (device != null)
+            {
+                return XusbCore.Device_WaitForInput(device.AssociatedBus.Handle,
+                    device.IndexOnBus, userIndex, out inputState);
+            }
+            else
+            {
+                inputState = default;
+                return Win32Error.DeviceNotConnected;
+            }
+        }
 
-        // /// <summary>
-        // /// Waits asynchronously for a new input state.
-        // /// </summary>
-        // /// <param name="userIndex">
-        // /// The index of the device to query.
-        // /// </param>
-        // /// <returns>
-        // /// A task that returns a tuple containing a Win32 error code and the input state that ended the wait.
-        // /// See <see cref="WaitForInput(byte, out XusbInputState)"/> for specific error codes.
-        // /// </returns>
-        // public static Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
-        // {
-        //     return Task.Run(() => {
-        //         int result = WaitForInput(userIndex, out var inputState);
-        //         return (result, inputState);
-        //     });
-        // }
+        /// <summary>
+        /// Waits asynchronously for a new input state.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This requires an active non-console window in order to work.
+        /// This is a limitation imposed by the driver itself.
+        /// </remarks>
+        /// <param name="userIndex">
+        /// The index of the device to query.
+        /// </param>
+        /// <returns>
+        /// A task that returns a tuple containing a Win32 error code and the input state that ended the wait.
+        /// See <see cref="WaitForInput(byte, out XusbInputState)"/> for specific error codes.
+        /// </returns>
+        public static Task<(int, XusbInputState)> WaitForInputAsync(byte userIndex)
+        {
+            return Task.Run(() => {
+                int result = WaitForInput(userIndex, out var inputState);
+                return (result, inputState);
+            });
+        }
 
         /// <inheritdoc cref="XusbCore.Device_CancelWait(byte)"/>
         /// <param name="userIndex">

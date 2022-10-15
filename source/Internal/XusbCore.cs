@@ -315,7 +315,10 @@ namespace SharpXusb
         /// <summary>
         /// Waits for a new input state.
         /// </summary>
-        // TODO: This doesn't seem to work properly
+        /// <remarks>
+        /// NOTE: This requires an active non-console window in order to work.
+        /// This is a limitation imposed by the driver itself.
+        /// </remarks>
         public static unsafe int Device_WaitForInput(SafeObjectHandle busHandle_Async, byte indexOnBus, byte userIndex,
             out XusbInputState inputState)
         {
