@@ -243,14 +243,14 @@ namespace SharpXusbTestApp
         {
             string indent = GetIndentation(indentAmount);
 
-            Console.WriteLine($"{indent}Version:    0x{capabilities.Version:X4}");
-            Console.WriteLine($"{indent}Type:       0x{capabilities.Type:X2} ({(XusbControllerType)capabilities.Type})");
-            Console.WriteLine($"{indent}SubType:    0x{capabilities.SubType:X2} ({(XusbControllerSubType)capabilities.SubType})");
-            Console.WriteLine($"{indent}Flags:      0x{capabilities.Flags:X4} ({(XusbCapabilityFlags)capabilities.Flags})");
-            Console.WriteLine($"{indent}VendorId:   0x{capabilities.VendorId:X4}");
-            Console.WriteLine($"{indent}ProductId:  0x{capabilities.ProductId:X4}");
-            Console.WriteLine($"{indent}Revision:   0x{capabilities.Revision:X4}");
-            Console.WriteLine($"{indent}XusbId:     0x{capabilities.XusbId:X8}");
+            Console.WriteLine($"{indent}Version:      0x{capabilities.Version:X4}");
+            Console.WriteLine($"{indent}Type:         0x{capabilities.Type:X2} ({(XusbControllerType)capabilities.Type})");
+            Console.WriteLine($"{indent}SubType:      0x{capabilities.SubType:X2} ({(XusbControllerSubType)capabilities.SubType})");
+            Console.WriteLine($"{indent}Flags:        0x{capabilities.Flags:X4} ({(XusbCapabilityFlags)capabilities.Flags})");
+            Console.WriteLine($"{indent}VendorId:     0x{capabilities.VendorId:X4}");
+            Console.WriteLine($"{indent}ProductId:    0x{capabilities.ProductId:X4}");
+            Console.WriteLine($"{indent}Revision:     0x{capabilities.Revision:X4}");
+            Console.WriteLine($"{indent}SerialNumber: 0x{capabilities.SerialNumber:X8}");
 
             capabilities.Gamepad.ToConsole(indentAmount);
 

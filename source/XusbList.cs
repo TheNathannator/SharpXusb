@@ -257,13 +257,13 @@ namespace SharpXusb
                         else
                         {
                             var caps_v2 = capabilities.Capabilities_v2;
-                            Debug.WriteLine($"Type:       0x{caps_v2.Type:X2} ({(XusbControllerType)caps_v2.Type})");
-                            Debug.WriteLine($"SubType:    0x{caps_v2.SubType:X2} ({(XusbControllerSubType)caps_v2.SubType})");
-                            Debug.WriteLine($"Flags:      0x{caps_v2.Flags:X4} ({(XusbCapabilityFlags)caps_v2.Flags})");
-                            Debug.WriteLine($"VendorId:   0x{caps_v2.VendorId:X4}");
-                            Debug.WriteLine($"ProductId:  0x{caps_v2.ProductId:X4}");
-                            Debug.WriteLine($"Revision:   0x{caps_v2.Revision:X4}");
-                            Debug.WriteLine($"XusbId:     0x{caps_v2.XusbId:X8}");
+                            Debug.WriteLine($"Type:         0x{caps_v2.Type:X2} ({(XusbControllerType)caps_v2.Type})");
+                            Debug.WriteLine($"SubType:      0x{caps_v2.SubType:X2} ({(XusbControllerSubType)caps_v2.SubType})");
+                            Debug.WriteLine($"Flags:        0x{caps_v2.Flags:X4} ({(XusbCapabilityFlags)caps_v2.Flags})");
+                            Debug.WriteLine($"VendorId:     0x{caps_v2.VendorId:X4}");
+                            Debug.WriteLine($"ProductId:    0x{caps_v2.ProductId:X4}");
+                            Debug.WriteLine($"Revision:     0x{caps_v2.Revision:X4}");
+                            Debug.WriteLine($"SerialNumber: 0x{caps_v2.SerialNumber:X8}");
                         }
                     }
                     catch (Exception ex)

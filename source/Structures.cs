@@ -908,10 +908,10 @@ namespace SharpXusb
         public ushort Revision;
 
         /// <summary>
-        /// XUSB ID(?) of the device.
+        /// Serial number of the device.
         /// </summary>
         [FieldOffset(12)]
-        public uint XusbId;
+        public uint SerialNumber;
 
         /// <summary>
         /// Supported inputs of the device.
